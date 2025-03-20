@@ -1,2 +1,4 @@
 # java-shareit
-Template repository for Shareit project.
+учебный проект
+
+## Спринт №14

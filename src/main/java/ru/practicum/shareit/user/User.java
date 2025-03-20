@@ -14,7 +14,7 @@ import ru.practicum.shareit.validator.Valid;
 @EqualsAndHashCode(of = {"name", "email"})
 public class User {
     @NotNull(groups = {Valid.OnUpdate.class}, message = "id должен быть определен")
-    Long id;
+    private Long id;
 
     @NotBlank(message = "Имя не может быть пустым", groups = {Valid.OnCreate.class})
     private String name;

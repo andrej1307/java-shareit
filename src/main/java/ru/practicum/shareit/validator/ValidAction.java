@@ -1,6 +1,6 @@
 package ru.practicum.shareit.validator;
 
-public interface Valid {
+public interface ValidAction {
 
     interface OnCreate {
     }

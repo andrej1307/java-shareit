@@ -8,6 +8,7 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.storage.UserStorage;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -18,8 +19,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(User user) {
-        return userStorage.createUser(user)
+    public User createUser(User newUser) {
+        // Проверяем существование пользователя с указанным Email перед добавлением
+        Optional<User> userExists = userStorage.findAllUsers().stream()
+                .filter(user -> user.getEmail().equalsIgnoreCase(newUser.getEmail()))
+                .findFirst();
+        if (userExists.isPresent()) {
+            throw new ConflictException("Пользователь уже существует: " + userExists.get());
+        }
+        return userStorage.createUser(newUser)
                 .orElseThrow(() -> new InternalServerException("Ошибка при создании пользователя."));
     }
 
@@ -42,8 +50,8 @@ public class UserServiceImpl implements UserService {
         }
         if (updUser.getEmail() != null) {
             for (User user1 : userStorage.findAllUsers()) {
-                if (user1.getEmail().equals(updUser.getEmail())
-                        && user1.getId().equals(id)) {
+                if (user1.getEmail().equalsIgnoreCase(updUser.getEmail())
+                        && !user1.getId().equals(id)) {
                     throw new ConflictException("Обнаружен конфликт Email адресов: " + user1);
                 }
             }

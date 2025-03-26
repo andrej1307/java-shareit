@@ -16,7 +16,7 @@ public class ItemRequest {
     @NotNull(groups = {ValidAction.OnUpdate.class}, message = "id должен быть определен")
     private Long id;
 
-    @Size(min = 0, max = 200, message = "Максимальная длина описания - 200 символов.",
+    @Size(max = 200, message = "Максимальная длина описания - 200 символов.",
             groups = {ValidAction.OnCreate.class, ValidAction.OnUpdate.class})
     private String description;
 

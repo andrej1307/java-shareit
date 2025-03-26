@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user.service;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+import ru.practicum.shareit.excepton.ConflictException;
 import ru.practicum.shareit.excepton.InternalServerException;
 import ru.practicum.shareit.excepton.NotFoundException;
 import ru.practicum.shareit.user.User;
@@ -8,7 +9,7 @@ import ru.practicum.shareit.user.storage.UserStorage;
 
 import java.util.Collection;
 
-@Repository
+@Service
 public class UserServiceImpl implements UserService {
     private final UserStorage userStorage;
 
@@ -36,10 +37,16 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() ->
                         new NotFoundException("Пользователь не найден id=" + id));
 
-        if(updUser.getName() != null) {
+        if (updUser.getName() != null) {
             user.setName(updUser.getName());
         }
-        if(updUser.getEmail() != null) {
+        if (updUser.getEmail() != null) {
+            for (User user1 : userStorage.findAllUsers()) {
+                if (user1.getEmail().equals(updUser.getEmail())
+                        && user1.getId().equals(id)) {
+                    throw new ConflictException("Обнаружен конфликт Email адресов: " + user1);
+                }
+            }
             user.setEmail(updUser.getEmail());
         }
         return userStorage.updateUser(user)

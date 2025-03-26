@@ -1,7 +1,7 @@
 package ru.practicum.shareit.user.storage;
 
 import org.springframework.stereotype.Repository;
-import ru.practicum.shareit.excepton.ValidationException;
+import ru.practicum.shareit.excepton.InternalServerException;
 import ru.practicum.shareit.user.User;
 
 import java.util.Collection;
@@ -24,12 +24,12 @@ public class UserInMemoryStorage implements UserStorage {
     @Override
     public Optional<User> createUser(User user) {
         if (users.containsValue(user)) {
-            throw new ValidationException("пользователь уже существует: "
-                    + user.toString());
+            throw new InternalServerException("пользователь уже существует: "
+                    + user.getEmail());
         }
         user.setId(idMain++);
         users.put(user.getId(), user);
-        return Optional.ofNullable(user);
+        return Optional.of(user);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class UserInMemoryStorage implements UserStorage {
     @Override
     public Optional<User> updateUser(User user) {
         users.put(user.getId(), user);
-        return Optional.ofNullable(user);
+        return Optional.of(user);
     }
 
     @Override

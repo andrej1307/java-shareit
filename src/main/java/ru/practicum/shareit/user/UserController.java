@@ -70,11 +70,12 @@ public class UserController {
      * @param updUser - объект с обновленной информацией о пользователе
      * @return - подтверждение обновленного объекта
      */
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto updateUser( @PathVariable Long id,
-            @Validated(ValidAction.OnUpdate.class) @RequestBody UserDto updUser) {
+    public UserDto updateUser(@PathVariable Long id,
+                              @Validated(ValidAction.OnUpdate.class) @RequestBody UserDto updUser) {
         log.info("Обновляем данные о пользователе : {}", updUser.toString());
+        updUser.setId(id);
         User user = userService.updateUser(UserMapper.toUser(updUser));
         return UserMapper.toUserDto(user);
     }
@@ -93,6 +94,7 @@ public class UserController {
 
     /**
      * Удаление пользователя по заданному идентификатору
+     *
      * @param id - идентификатор пользователя
      */
     @DeleteMapping("/{id}")

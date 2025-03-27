@@ -2,12 +2,12 @@ package ru.practicum.shareit.item.storage;
 
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.excepton.ValidationException;
+import ru.practicum.shareit.item.ItemMapper;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.User;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Класс хранилища в памяти информации о вещах.
@@ -60,6 +60,29 @@ public class ItemInMemoryStorage implements ItemStorage {
     @Override
     public Collection<Item> getAllItems() {
         return items.values();
+    }
+
+    @Override
+    public Collection<Item> getAllItemsByOwner(User owner) {
+        return items.values().stream()
+                .filter(item -> item.getOwner().equals(owner))
+                .toList();
+    }
+
+    @Override
+    public Collection<Item> findItemsBytext(final String text) {
+        if (text == null || text.isEmpty()) {
+            return List.of();
+        }
+
+        Collection<Item> findItems;
+        findItems = items.values().stream()
+                .filter(item ->
+                        item.getName().toUpperCase().contains(text.toUpperCase())
+                                || item.getDescription().toUpperCase().contains(text.toUpperCase()))
+                .filter(Item::getAvailable)
+                .toList();
+        return findItems;
     }
 
     @Override

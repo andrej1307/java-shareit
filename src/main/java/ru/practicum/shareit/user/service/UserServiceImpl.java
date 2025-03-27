@@ -5,10 +5,11 @@ import ru.practicum.shareit.excepton.ConflictException;
 import ru.practicum.shareit.excepton.InternalServerException;
 import ru.practicum.shareit.excepton.NotFoundException;
 import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.UserMapper;
+import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.storage.UserStorage;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -19,47 +20,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(User newUser) {
-        // Проверяем существование пользователя с указанным Email перед добавлением
-        Optional<User> userExists = userStorage.findAllUsers().stream()
-                .filter(user -> user.getEmail().equalsIgnoreCase(newUser.getEmail()))
-                .findFirst();
-        if (userExists.isPresent()) {
-            throw new ConflictException("Пользователь уже существует: " + userExists.get());
-        }
-        return userStorage.createUser(newUser)
+    public UserDto createUser(UserDto newUserDto) throws ConflictException, InternalServerException {
+        User user = userStorage.createUser(UserMapper.toUser(newUserDto))
                 .orElseThrow(() -> new InternalServerException("Ошибка при создании пользователя."));
+        return UserMapper.toUserDto(user);
     }
 
     @Override
-    public User getUserById(Long id) {
-        return userStorage.getUserById(id)
-                .orElseThrow(() ->
-                        new NotFoundException("Пользователь не найден id=" + id));
-    }
-
-    @Override
-    public User updateUser(User updUser) {
-        Long id = updUser.getId();
+    public UserDto getUserById(Long id) {
         User user = userStorage.getUserById(id)
                 .orElseThrow(() ->
                         new NotFoundException("Пользователь не найден id=" + id));
+        return UserMapper.toUserDto(user);
+    }
 
-        if (updUser.getName() != null) {
-            user.setName(updUser.getName());
+    @Override
+    public UserDto updateUser(UserDto updUserDto) {
+        Long id = updUserDto.getId();
+        User user = userStorage.getUserById(id)
+                .orElseThrow(() ->
+                        new NotFoundException("Пользователь не найден id=" + id));
+        if (updUserDto.getName() != null) {
+            user.setName(updUserDto.getName());
         }
-        if (updUser.getEmail() != null) {
-            for (User user1 : userStorage.findAllUsers()) {
-                if (user1.getEmail().equalsIgnoreCase(updUser.getEmail())
-                        && !user1.getId().equals(id)) {
-                    throw new ConflictException("Обнаружен конфликт Email адресов: " + user1);
-                }
-            }
-            user.setEmail(updUser.getEmail());
+        if (updUserDto.getEmail() != null) {
+            user.setEmail(updUserDto.getEmail());
         }
-        return userStorage.updateUser(user)
+        user = userStorage.updateUser(user)
                 .orElseThrow(() ->
                         new InternalServerException("Ошибка при обновлении пользователя"));
+        return UserMapper.toUserDto(user);
     }
 
     @Override
@@ -71,13 +61,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Collection<User> getAllUsers() {
-        return userStorage.findAllUsers();
+    public Collection<UserDto> getAllUsers() {
+        return userStorage.findAllUsers().stream()
+                .map(UserMapper::toUserDto)
+                .toList();
     }
 
     @Override
-    public String deleteAllUsers() {
+    public Collection<UserDto> deleteAllUsers() {
         userStorage.deleteAllUsers();
-        return "Все пользователи удалены.";
+        return getAllUsers();
     }
 }

@@ -7,17 +7,17 @@ import ru.practicum.shareit.user.User;
 import java.util.Collection;
 
 public interface ItemService {
-    Item addItem(Item item);
+    ItemDto addItem(ItemDto item, Long ownerId);
 
-    Item updateItem(Item item);
+    ItemDto updateItem(ItemDto updItem, Long ownerId);
 
-    Item getItem(Long id);
+    ItemDto getItem(Long id);
 
-    Collection<ItemDto> getItemsByOwnerId(User owner);
+    Collection<ItemDto> getItemsByOwnerId(Long ownerId);
 
     Collection<ItemDto> searchItemsByText(String text);
 
-    void deleteItem(Long id);
+    void deleteItem(Long id, Long ownerId);
 
-    String deleteAllItems();
+    Collection<ItemDto> deleteAllItems();
 }

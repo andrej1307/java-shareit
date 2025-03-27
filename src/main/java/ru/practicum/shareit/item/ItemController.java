@@ -32,18 +32,16 @@ public class ItemController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<ItemDto> findAllItems(
-            @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+            @RequestHeader("X-Sharer-User-Id") final Long ownerId) {
         log.info("Запрашиваем список вещей владельца id={}", ownerId);
-        User owner = userService.getUserById(ownerId);
-        return itemService.getItemsByOwnerId(owner);
+        return itemService.getItemsByOwnerId(ownerId);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ItemDto findItem(@PathVariable Long id) {
         log.info("Ищем вещь id={}.", id);
-        Item item = itemService.getItem(id);
-        return ItemMapper.toItemDto(item);
+        return itemService.getItem(id);
     }
 
     @GetMapping("/search")
@@ -53,44 +51,33 @@ public class ItemController {
         return itemService.searchItemsByText(text);
     }
 
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ItemDto createItem(
-            @RequestHeader("X-Sharer-User-Id") Long ownerId,
+            @RequestHeader("X-Sharer-User-Id") final Long ownerId,
             @Validated(ValidAction.OnCreate.class) @RequestBody ItemDto itemDto) {
-        log.info("Добавляем вещь : {}", itemDto.toString());
-        Item item = ItemMapper.toItem(itemDto);
-        item.setOwner(userService.getUserById(ownerId));
-
-        return ItemMapper.toItemDto(itemService.addItem(item));
+        log.info("Пользователь id={} добавляет вещь : {}", ownerId, itemDto.toString());
+        return itemService.addItem(itemDto, ownerId);
     }
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ItemDto updateItem(
-            @RequestHeader("X-Sharer-User-Id") Long ownerId,
+            @RequestHeader("X-Sharer-User-Id") final Long ownerId,
             @PathVariable Long id,
             @RequestBody ItemDto itemDto) {
-        log.info("Пользователь id={}. Обновляет сведения об элемете id={} {}", ownerId, id, itemDto);
-        Item item = ItemMapper.toItem(itemDto);
-        item.setId(id);
-        item.setOwner(userService.getUserById(ownerId));
-
-        return ItemMapper.toItemDto(itemService.updateItem(item));
+        log.info("Пользователь id={} обновляет сведения об элемете id={} {}", ownerId, id, itemDto);
+        itemDto.setId(id);
+        return itemService.updateItem(itemDto, ownerId);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteItem(
-            @RequestHeader("X-Sharer-User-Id") Long ownerId,
+            @RequestHeader("X-Sharer-User-Id") final Long ownerId,
             @PathVariable Long id) {
         log.info("пользователь id={}. Удаляет вещь id={}", ownerId, id);
-        Item item = itemService.getItem(id);
-        if (!item.getOwner().getId().equals(ownerId)) {
-            throw new AccessDeniedException("Удалять вещь может только хозяин.");
-        }
-        itemService.deleteItem(id);
+        itemService.deleteItem(id, ownerId);
     }
 
     @DeleteMapping

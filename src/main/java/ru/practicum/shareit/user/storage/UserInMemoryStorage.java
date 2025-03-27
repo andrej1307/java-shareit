@@ -1,7 +1,7 @@
 package ru.practicum.shareit.user.storage;
 
 import org.springframework.stereotype.Repository;
-import ru.practicum.shareit.excepton.InternalServerException;
+import ru.practicum.shareit.excepton.ConflictException;
 import ru.practicum.shareit.user.User;
 
 import java.util.Collection;
@@ -15,20 +15,23 @@ import java.util.Optional;
 @Repository
 public class UserInMemoryStorage implements UserStorage {
     private final Map<Long, User> users;
+    private final Map<String, User> userEmails;
     private Long idMain = 1L;
 
     public UserInMemoryStorage() {
         users = new HashMap<>();
+        userEmails = new HashMap<>();
     }
 
     @Override
     public Optional<User> createUser(User user) {
-        if (users.containsValue(user)) {
-            throw new InternalServerException("пользователь уже существует: "
+        if (userEmails.get(user.getEmail()) != null) {
+            throw new ConflictException("пользователь уже существует: "
                     + user.getEmail());
         }
         user.setId(idMain++);
         users.put(user.getId(), user);
+        userEmails.put(user.getEmail(), user);
         return Optional.of(user);
     }
 
@@ -42,13 +45,23 @@ public class UserInMemoryStorage implements UserStorage {
     }
 
     @Override
-    public Optional<User> updateUser(User user) {
-        users.put(user.getId(), user);
-        return Optional.of(user);
+    public Optional<User> updateUser(User updUser) {
+        User userExists = userEmails.get(updUser.getEmail());
+        if (userExists != null) {
+            if (!userExists.getId().equals(updUser.getId())) {
+                throw new ConflictException("Обнаружен конфликт Email : " + userExists);
+            }
+        }
+        userEmails.remove(users.get(updUser.getId()).getEmail());
+        users.put(updUser.getId(), updUser);
+        userEmails.put(updUser.getEmail(), updUser);
+        return Optional.of(updUser);
     }
 
     @Override
     public void deleteUser(Long id) {
+        User user = users.get(id);
+        userEmails.remove(user.getEmail());
         users.remove(id);
     }
 
@@ -59,6 +72,7 @@ public class UserInMemoryStorage implements UserStorage {
 
     @Override
     public void deleteAllUsers() {
+        userEmails.clear();
         users.clear();
     }
 }

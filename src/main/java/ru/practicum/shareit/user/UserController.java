@@ -31,7 +31,7 @@ public class UserController {
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Collection<User> findAllUser() {
+    public Collection<UserDto> findAllUser() {
         log.info("Запрашиваем список всех пользователей.");
         return userService.getAllUsers();
     }
@@ -46,8 +46,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public UserDto findUser(@PathVariable Long id) {
         log.info("Ищем пользователя id={}.", id);
-        User user = userService.getUserById(id);
-        return UserMapper.toUserDto(user);
+        return userService.getUserById(id);
     }
 
     /**
@@ -60,8 +59,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto addNewUser(@Validated(ValidAction.OnCreate.class) @RequestBody UserDto userDto) {
         log.info("Создаем пользователя : {}.", userDto.toString());
-        User user = userService.createUser(UserMapper.toUser(userDto));
-        return UserMapper.toUserDto(user);
+        return userService.createUser(userDto);
     }
 
     /**
@@ -74,10 +72,9 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public UserDto updateUser(@PathVariable Long id,
                               @Validated(ValidAction.OnUpdate.class) @RequestBody UserDto updUser) {
-        log.info("Обновляем данные о пользователе : {}", updUser.toString());
         updUser.setId(id);
-        User user = userService.updateUser(UserMapper.toUser(updUser));
-        return UserMapper.toUserDto(user);
+        log.info("Обновляем данные о пользователе : {}", updUser);
+        return userService.updateUser(updUser);
     }
 
     /**
@@ -87,7 +84,7 @@ public class UserController {
      */
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
-    public String deleteAllUsers() {
+    public Collection<UserDto> deleteAllUsers() {
         log.info("Удаляем всех пользователей.");
         return userService.deleteAllUsers();
     }

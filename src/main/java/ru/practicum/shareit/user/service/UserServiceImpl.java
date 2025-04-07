@@ -1,8 +1,6 @@
 package ru.practicum.shareit.user.service;
 
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.excepton.ConflictException;
-import ru.practicum.shareit.excepton.InternalServerException;
 import ru.practicum.shareit.excepton.NotFoundException;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserMapper;
@@ -36,7 +34,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(UserDto updUserDto) {
         Long id = updUserDto.getId();
-        User user =  userRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() ->
                         new NotFoundException("Пользователь не найден id=" + id));
         if (updUserDto.getName() != null) {
@@ -51,7 +49,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long id) {
-        if(userRepository.existsById(id)) {
+        if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
         } else {
             throw new NotFoundException("Пользователь не найден id=" + id);

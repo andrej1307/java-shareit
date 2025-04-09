@@ -4,8 +4,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.booking.BookingStatus;
+import ru.practicum.shareit.booking.enums.BookingStatus;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.validator.ValidAction;
 
@@ -18,19 +20,19 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookingDto {
-    private Long Id;
+    private Long id;
 
     @NotNull(message = "Время начала бронирования должно быть задано.", groups = {ValidAction.OnCreate.class})
-    private LocalDateTime timeStart;
+    private LocalDateTime start;
 
     @NotNull(message = "Время завершения бронирования должно быть задано.", groups = {ValidAction.OnCreate.class})
-    private LocalDateTime timeEnd;
+    private LocalDateTime end;
 
-    @NotNull(message = "Вещь для бронирования должна быть определена.", groups = {ValidAction.OnCreate.class})
-    private ItemDto itemDto;
+    private Long itemId;
+    private Item item;
 
-    @NotNull(message = "Заказчик бронирования должна быть указан.", groups = {ValidAction.OnCreate.class})
-    private UserDto userDto;
+    private Long bookerId;
+    private User booker;
 
     private BookingStatus status = BookingStatus.WAITING;
 }

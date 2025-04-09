@@ -37,7 +37,7 @@ public class Item {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "owner_id")
     private User owner;
 
     @Column(name = "available")

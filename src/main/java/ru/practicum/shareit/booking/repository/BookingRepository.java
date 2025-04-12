@@ -53,10 +53,10 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "WHERE (bk.booker.id = ?1 AND bk.item.id = ?2)" +
             "AND bk.status = \'APPROVED\'" +
             "ORDER BY bk.start DESC LIMIT 1")
-    Booking fiindBokingsByBookerIdAndItemId(Long bookerId, Long itemId);
+    Booking findBookingsByBookerIdAndItemId(Long bookerId, Long itemId);
 
     @Query("SELECT bk FROM Booking AS bk " +
             "WHERE bk.item.id = ?1 AND bk.status = \'APPROVED\'" +
             "ORDER BY bk.start DESC LIMIT 1")
-    Booking findLastBukingByItemId(Long itemId);
+    Booking findLastBookingByItemId(Long itemId);
 }

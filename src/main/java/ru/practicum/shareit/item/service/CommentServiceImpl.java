@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден id=" + userId));
 
         Long itemId = commentDto.getItemId();
-        Booking booking = bookingRepository.fiindBokingsByBookerIdAndItemId(userId, itemId);
+        Booking booking = bookingRepository.findBookingsByBookerIdAndItemId(userId, itemId);
         if (booking == null) {
             throw new NotFoundException("Пользователь id=" + userId +
                     " не бронировал вещь id=" + itemId);

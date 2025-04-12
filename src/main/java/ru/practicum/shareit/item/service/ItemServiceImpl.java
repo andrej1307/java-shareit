@@ -16,7 +16,6 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -89,15 +88,14 @@ public class ItemServiceImpl implements ItemService {
         // Если запрос пришел от хозяина, то отображаем даты последнего бронирования
         // и допустимого следующего
         if (item.getOwner().getId().equals(userId)) {
-            Booking lastBooking = bookingRepository.findLastBukingByItemId(itemId);
+            Booking lastBooking = bookingRepository.findLastBookingByItemId(itemId);
             if (lastBooking != null) {
                 icDto.setLastBooking(lastBooking.getStart());
                 icDto.setNextBooking(lastBooking.getEnd().plusSeconds(60));
             }
         }
         // ищем комментарии к вещи
-        List<CommentDto> comments = new ArrayList<>();
-        comments = commentRepository.findAllByItem_Id(itemId)
+        List<CommentDto> comments = commentRepository.findAllByItem_Id(itemId)
                 .stream()
                 .map(CommentMapper::toDto)
                 .toList();
@@ -130,7 +128,7 @@ public class ItemServiceImpl implements ItemService {
                 .map(ItemMapper::toItemDto)
                 .toList();
         for (ItemDto itemDto : items) {
-            Booking lastBooking = bookingRepository.findLastBukingByItemId(itemDto.getId());
+            Booking lastBooking = bookingRepository.findLastBookingByItemId(itemDto.getId());
             if (lastBooking != null) {
                 itemDto.setLastBooking(lastBooking.getStart());
                 itemDto.setNextBooking(lastBooking.getEnd().plusSeconds(60));

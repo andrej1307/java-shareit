@@ -4,7 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.ItemCommentsDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.service.CommentService;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.validator.ValidAction;
 
@@ -18,9 +21,11 @@ import java.util.Collection;
 @RequestMapping("/items")
 public class ItemController {
     private final ItemService itemService;
+    private final CommentService commentService;
 
-    public ItemController(ItemService itemService) {
+    public ItemController(ItemService itemService, CommentService commentService) {
         this.itemService = itemService;
+        this.commentService = commentService;
     }
 
     @GetMapping
@@ -33,9 +38,10 @@ public class ItemController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemDto findItem(@PathVariable Long id) {
-        log.info("Ищем вещь id={}.", id);
-        return itemService.getItem(id);
+    public ItemCommentsDto findItem(@PathVariable Long id,
+                                    @RequestHeader("X-Sharer-User-Id") final Long userId) {
+        log.info("Польдователь id={} просматривает информацию о вещи id={}.", userId, id);
+        return itemService.getItem(id, userId);
     }
 
     @GetMapping("/search")
@@ -80,4 +86,17 @@ public class ItemController {
         itemService.deleteAllItems();
         return "Все описания вещей удалены.";
     }
+
+    @PostMapping("/{itemId}/comment")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CommentDto addComment(
+            @RequestHeader("X-Sharer-User-Id") final Long userId,
+            @PathVariable Long itemId,
+            @RequestBody CommentDto commentDto) {
+        log.info("Пользователь id={} добавляет комментарий для вещи id={}", userId, itemId);
+        commentDto.setAuthorId(userId);
+        commentDto.setItemId(itemId);
+        return commentService.addComment(commentDto);
+    }
+
 }

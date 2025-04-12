@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking.service;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingMapper;
@@ -18,6 +19,7 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +39,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto addBooking(BookingDto bookingDto, Long userId) {
-        if ( bookingDto.getItemId() == null) {
+        if (bookingDto.getItemId() == null) {
             throw new InternalServerException("Отсутствуют сведения о необходимой вещи.");
         }
         if (userId == null) {
@@ -72,10 +74,10 @@ public class BookingServiceImpl implements BookingService {
     public BookingDto findBookingById(Long bookingId, Long userId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() ->
-                    new NotFoundException("Не найден запрос на бронирование id=" + bookingId));
+                        new NotFoundException("Не найден запрос на бронирование id=" + bookingId));
         if (!booking.getBooker().getId().equals(userId) &&
-             !booking.getItem().getOwner().getId().equals(userId)) {
-            throw new AccessDeniedException("Пользователь id=" + userId +" не является автором запроса или хозяином вещи.");
+                !booking.getItem().getOwner().getId().equals(userId)) {
+            throw new AccessDeniedException("Пользователь id=" + userId + " не является автором запроса или хозяином вещи.");
         }
         return BookingMapper.toBookingDto(booking);
     }
@@ -133,11 +135,11 @@ public class BookingServiceImpl implements BookingService {
         } else if (state.equals(SearchState.ALL)) {
             bookings = bookingRepository.findAllByBookerIdOrderByStartDesc(bookerId);
         } else if (state.equals(SearchState.PAST)) {
-            bookings = bookingRepository.findBookingsByBookerIdPast(bookerId, Instant.now());
+            bookings = bookingRepository.findByBooker_IdAndEndIsBefore(bookerId, LocalDateTime.now(), Sort.by("DESC", "start"));
         } else if (state.equals(SearchState.CURRENT)) {
             bookings = bookingRepository.findBookingsByBookerIdCurrent(bookerId, Instant.now());
         } else if (state.equals(SearchState.FUTURE)) {
-            bookings = bookingRepository.findBookingsByBookerIdFuture(bookerId, Instant.now());
+            bookings = bookingRepository.findByBooker_IdAndStartIsAfter(bookerId, LocalDateTime.now(), Sort.by("DESC", "start"));
         }
         return bookings.stream().map(BookingMapper::toBookingDto).toList();
     }

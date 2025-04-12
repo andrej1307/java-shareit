@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
-import ru.practicum.shareit.booking.enums.BookingStatus;
 import ru.practicum.shareit.booking.enums.SearchState;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.validator.ValidAction;
@@ -28,11 +27,11 @@ public class BookingController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BookingDto addBooking(
-                            @RequestHeader("X-Sharer-User-Id") final Long userId,
-                            @Validated(ValidAction.OnCreate.class)
-                            @RequestBody BookingDto bookingDto) {
-        log.info("Создаем запрос на бронирование : {}", bookingDto);
-        return bookingService.addBooking(bookingDto, userId);
+            @RequestHeader("X-Sharer-User-Id") final Long bookerId,
+            @Validated(ValidAction.OnCreate.class)
+            @RequestBody BookingDto bookingDto) {
+        log.info("Пользователь id={} cоздает запрос на бронирование : {}", bookerId, bookingDto);
+        return bookingService.addBooking(bookingDto, bookerId);
     }
 
     @PatchMapping("/{id}")

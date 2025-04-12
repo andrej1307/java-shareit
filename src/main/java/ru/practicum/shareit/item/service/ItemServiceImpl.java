@@ -1,15 +1,22 @@
 package ru.practicum.shareit.item.service;
 
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.excepton.AccessDeniedException;
 import ru.practicum.shareit.excepton.NotFoundException;
+import ru.practicum.shareit.item.CommentMapper;
 import ru.practicum.shareit.item.ItemMapper;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.ItemCommentsDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,10 +24,17 @@ import java.util.List;
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
+    private final BookingRepository bookingRepository;
+    private final CommentRepository commentRepository;
 
-    public ItemServiceImpl(ItemRepository itemRepository, UserRepository userRepository) {
+    public ItemServiceImpl(ItemRepository itemRepository,
+                           UserRepository userRepository,
+                           BookingRepository bookingRepository,
+                           CommentRepository commentRepository) {
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
+        this.bookingRepository = bookingRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -66,11 +80,29 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto getItem(Long id) {
-        Item item = itemRepository.findById(id)
+    public ItemCommentsDto getItem(Long itemId, Long userId) {
+        Item item = itemRepository.findById(itemId)
                 .orElseThrow(() ->
-                        new NotFoundException("Не найдена вещь id=" + id));
-        return ItemMapper.toItemDto(item);
+                        new NotFoundException("Не найдена вещь id=" + itemId));
+        ItemCommentsDto icDto = ItemMapper.toItemCommentsDto(item);
+
+        // Если запрос пришел от хозяина, то отображаем даты последнего бронирования
+        // и допустимого следующего
+        if (item.getOwner().getId().equals(userId)) {
+            Booking lastBooking = bookingRepository.findLastBukingByItemId(itemId);
+            if (lastBooking != null) {
+                icDto.setLastBooking(lastBooking.getStart());
+                icDto.setNextBooking(lastBooking.getEnd().plusSeconds(60));
+            }
+        }
+        // ищем комментарии к вещи
+        List<CommentDto> comments = new ArrayList<>();
+        comments = commentRepository.findAllByItem_Id(itemId)
+                .stream()
+                .map(CommentMapper::toDto)
+                .toList();
+        icDto.setComments(comments);
+        return icDto;
     }
 
     @Override
@@ -93,9 +125,17 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Collection<ItemDto> getItemsByOwnerId(Long ownerId) {
         Collection<ItemDto> items;
-        items = itemRepository.findByOwnerIdEquals(ownerId).stream()
+        items = itemRepository.findByOwnerIdEquals(ownerId)
+                .stream()
                 .map(ItemMapper::toItemDto)
                 .toList();
+        for (ItemDto itemDto : items) {
+            Booking lastBooking = bookingRepository.findLastBukingByItemId(itemDto.getId());
+            if (lastBooking != null) {
+                itemDto.setLastBooking(lastBooking.getStart());
+                itemDto.setNextBooking(lastBooking.getEnd().plusSeconds(60));
+            }
+        }
         return items;
     }
 

@@ -12,7 +12,7 @@ import ru.practicum.shareit.validator.ValidAction;
 @Entity
 @Setter
 @Getter
-@Table(name = "users", schema = "public")
+@Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"email"})

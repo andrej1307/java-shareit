@@ -17,7 +17,6 @@ import ru.practicum.shareit.user.repository.UserRepository;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
 
 @Service
 public class CommentServiceImpl implements CommentService {

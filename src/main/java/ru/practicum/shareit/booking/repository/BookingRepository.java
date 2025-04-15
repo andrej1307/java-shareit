@@ -7,7 +7,6 @@ import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.enums.BookingStatus;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {

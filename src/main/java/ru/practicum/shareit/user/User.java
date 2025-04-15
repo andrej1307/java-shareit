@@ -3,18 +3,16 @@ package ru.practicum.shareit.user;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.practicum.shareit.validator.ValidAction;
 
 /**
  * Класс описания пользователя
  */
 @Entity
+@Setter
+@Getter
 @Table(name = "users", schema = "public")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"email"})

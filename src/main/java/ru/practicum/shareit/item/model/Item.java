@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.validator.ValidAction;
@@ -17,7 +14,8 @@ import ru.practicum.shareit.validator.ValidAction;
  */
 @Entity
 @Table(name = "items", schema = "public")
-@Data
+@Setter
+@Getter
 @EqualsAndHashCode(of = {"name", "description"})
 @AllArgsConstructor
 @NoArgsConstructor

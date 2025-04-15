@@ -2,9 +2,7 @@ package ru.practicum.shareit.request;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.validator.ValidAction;
 
@@ -14,8 +12,9 @@ import java.time.Instant;
  * Класс описания запроса
  */
 @Entity
+@Setter
+@Getter
 @Table(name = "itemrequests", schema = "public")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemRequest {

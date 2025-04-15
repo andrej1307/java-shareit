@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.enums.BookingStatus;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.validator.ValidAction;
 
 import java.time.LocalDateTime;
@@ -27,10 +29,10 @@ public class BookingDto {
     private LocalDateTime end;
 
     private Long itemId;
-    private Item item;
+    private ItemDto item;
 
     private Long bookerId;
-    private User booker;
+    private UserDto booker;
 
     private BookingStatus status = BookingStatus.WAITING;
 }

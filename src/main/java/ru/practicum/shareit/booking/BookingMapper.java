@@ -1,8 +1,10 @@
 package ru.practicum.shareit.booking;
 
 import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.item.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
+import ru.practicum.shareit.user.UserMapper;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -17,9 +19,9 @@ public class BookingMapper {
         bookingDto.setStart(LocalDateTime.ofInstant(booking.getStart(), ZoneOffset.UTC));
         bookingDto.setEnd(LocalDateTime.ofInstant(booking.getEnd(), ZoneOffset.UTC));
         bookingDto.setItemId(booking.getItem().getId());
-        bookingDto.setItem(booking.getItem());
+        bookingDto.setItem(ItemMapper.toItemDto(booking.getItem()));
         bookingDto.setBookerId(booking.getBooker().getId());
-        bookingDto.setBooker(booking.getBooker());
+        bookingDto.setBooker(UserMapper.toUserDto(booking.getBooker()));
         bookingDto.setStatus(booking.getStatus());
         return bookingDto;
     }

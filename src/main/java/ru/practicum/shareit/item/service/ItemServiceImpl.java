@@ -21,6 +21,7 @@ import java.util.List;
 
 @Service
 public class ItemServiceImpl implements ItemService {
+    private static final Integer NEXT_BOOKING_TIMEOUT = 60;
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
@@ -91,7 +92,7 @@ public class ItemServiceImpl implements ItemService {
             Booking lastBooking = bookingRepository.findLastBookingByItemId(itemId);
             if (lastBooking != null) {
                 icDto.setLastBooking(lastBooking.getStart());
-                icDto.setNextBooking(lastBooking.getEnd().plusSeconds(60));
+                icDto.setNextBooking(lastBooking.getEnd().plusSeconds(NEXT_BOOKING_TIMEOUT));
             }
         }
         // ищем комментарии к вещи
@@ -131,7 +132,7 @@ public class ItemServiceImpl implements ItemService {
             Booking lastBooking = bookingRepository.findLastBookingByItemId(itemDto.getId());
             if (lastBooking != null) {
                 itemDto.setLastBooking(lastBooking.getStart());
-                itemDto.setNextBooking(lastBooking.getEnd().plusSeconds(60));
+                itemDto.setNextBooking(lastBooking.getEnd().plusSeconds(NEXT_BOOKING_TIMEOUT));
             }
         }
         return items;

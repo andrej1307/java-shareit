@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/bookings")
 public class BookingController {
+    private static final String HEADER_USER_ID = "X-Sharer-User-Id";
     private final BookingService bookingService;
 
     public BookingController(BookingService bookingService) {
@@ -27,7 +28,7 @@ public class BookingController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BookingDto addBooking(
-            @RequestHeader("X-Sharer-User-Id") final Long bookerId,
+            @RequestHeader(HEADER_USER_ID) final Long bookerId,
             @Validated(ValidAction.OnCreate.class)
             @RequestBody BookingDto bookingDto) {
         log.info("Пользователь id={} cоздает запрос на бронирование : {}", bookerId, bookingDto);
@@ -37,7 +38,7 @@ public class BookingController {
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public BookingDto editBooking(
-            @RequestHeader("X-Sharer-User-Id") final Long editorId,
+            @RequestHeader(HEADER_USER_ID) final Long editorId,
             @PathVariable Long id,
             @RequestParam Boolean approved) {
         log.info("Пользователь id={} редактирует запрос на бронирование id={}", editorId, id);
@@ -47,7 +48,7 @@ public class BookingController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public BookingDto findBooking(
-            @RequestHeader("X-Sharer-User-Id") final Long userId,
+            @RequestHeader(HEADER_USER_ID) final Long userId,
             @PathVariable Long id) {
         log.info("Пользователь id={} просматривает запрос на бронирование id={}", userId, id);
         return bookingService.findBookingById(id, userId);
@@ -56,18 +57,18 @@ public class BookingController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<BookingDto> findBookingByBooker(
-            @RequestHeader("X-Sharer-User-Id") final Long bookerId,
+            @RequestHeader(HEADER_USER_ID) final Long bookerId,
             @RequestParam(defaultValue = "ALL") SearchState state) {
-        log.info("Пользователь id={} просматривает свои запроы на бронирование", bookerId);
+        log.info("Пользователь id={} просматривает свои запроcы на бронирование", bookerId);
         return bookingService.findBookingByBooker(bookerId, state);
     }
 
     @GetMapping("/owner")
     @ResponseStatus(HttpStatus.OK)
     public List<BookingDto> findBookingByOwner(
-            @RequestHeader("X-Sharer-User-Id") final Long ownerId,
+            @RequestHeader(HEADER_USER_ID) final Long ownerId,
             @RequestParam(defaultValue = "ALL") SearchState state) {
-        log.info("Пользователь id={} просматривает запроы на вои вещи", ownerId);
+        log.info("Пользователь id={} просматривает запроcы на вои вещи", ownerId);
         return bookingService.findBookingsByOwner(ownerId, state);
     }
 

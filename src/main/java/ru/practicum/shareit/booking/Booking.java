@@ -2,9 +2,7 @@ package ru.practicum.shareit.booking;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.practicum.shareit.booking.enums.BookingStatus;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
@@ -16,8 +14,9 @@ import java.time.Instant;
  * Класс описания бронирования вещи
  */
 @Entity
+@Setter
+@Getter
 @Table(name = "bookings", schema = "public")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Booking {

@@ -135,11 +135,11 @@ public class BookingServiceImpl implements BookingService {
         } else if (state.equals(SearchState.ALL)) {
             bookings = bookingRepository.findAllByBookerIdOrderByStartDesc(bookerId);
         } else if (state.equals(SearchState.PAST)) {
-            bookings = bookingRepository.findByBooker_IdAndEndIsBefore(bookerId, LocalDateTime.now(), Sort.by("DESC", "start"));
+            bookings = bookingRepository.findByBooker_IdAndEndIsBefore(bookerId, Instant.now(), Sort.by("DESC", "start"));
         } else if (state.equals(SearchState.CURRENT)) {
             bookings = bookingRepository.findBookingsByBookerIdCurrent(bookerId, Instant.now());
         } else if (state.equals(SearchState.FUTURE)) {
-            bookings = bookingRepository.findByBooker_IdAndStartIsAfter(bookerId, LocalDateTime.now(), Sort.by("DESC", "start"));
+            bookings = bookingRepository.findByBooker_IdAndStartIsAfter(bookerId, Instant.now(), Sort.by("DESC", "start"));
         }
         return bookings.stream().map(BookingMapper::toBookingDto).toList();
     }

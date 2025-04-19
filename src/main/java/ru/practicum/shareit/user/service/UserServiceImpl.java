@@ -1,34 +1,31 @@
 package ru.practicum.shareit.user.service;
 
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.excepton.ConflictException;
-import ru.practicum.shareit.excepton.InternalServerException;
 import ru.practicum.shareit.excepton.NotFoundException;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserMapper;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.storage.UserStorage;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.Collection;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private final UserStorage userStorage;
+    private final UserRepository userRepository;
 
-    public UserServiceImpl(UserStorage userStorage) {
-        this.userStorage = userStorage;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
-    public UserDto createUser(UserDto newUserDto) throws ConflictException, InternalServerException {
-        User user = userStorage.createUser(UserMapper.toUser(newUserDto))
-                .orElseThrow(() -> new InternalServerException("Ошибка при создании пользователя."));
+    public UserDto createUser(UserDto newUserDto) {
+        User user = userRepository.save(UserMapper.toUser(newUserDto));
         return UserMapper.toUserDto(user);
     }
 
     @Override
     public UserDto getUserById(Long id) {
-        User user = userStorage.getUserById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() ->
                         new NotFoundException("Пользователь не найден id=" + id));
         return UserMapper.toUserDto(user);
@@ -37,7 +34,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(UserDto updUserDto) {
         Long id = updUserDto.getId();
-        User user = userStorage.getUserById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() ->
                         new NotFoundException("Пользователь не найден id=" + id));
         if (updUserDto.getName() != null) {
@@ -46,30 +43,29 @@ public class UserServiceImpl implements UserService {
         if (updUserDto.getEmail() != null) {
             user.setEmail(updUserDto.getEmail());
         }
-        user = userStorage.updateUser(user)
-                .orElseThrow(() ->
-                        new InternalServerException("Ошибка при обновлении пользователя"));
-        return UserMapper.toUserDto(user);
+        User savedUser = userRepository.save(user);
+        return UserMapper.toUserDto(savedUser);
     }
 
     @Override
     public void deleteUser(Long id) {
-        userStorage.getUserById(id)
-                .orElseThrow(() ->
-                        new NotFoundException("Пользователь не найден id=" + id));
-        userStorage.deleteUser(id);
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+        } else {
+            throw new NotFoundException("Пользователь не найден id=" + id);
+        }
     }
 
     @Override
     public Collection<UserDto> getAllUsers() {
-        return userStorage.findAllUsers().stream()
+        return userRepository.findAll().stream()
                 .map(UserMapper::toUserDto)
                 .toList();
     }
 
     @Override
     public Collection<UserDto> deleteAllUsers() {
-        userStorage.deleteAllUsers();
+        userRepository.deleteAll();
         return getAllUsers();
     }
 }

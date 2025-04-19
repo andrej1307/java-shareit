@@ -5,13 +5,17 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.validator.ValidAction;
+
+import java.time.Instant;
 
 /**
  * Класс описания представления объектов при обмене данными
  */
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ItemDto {
     private Long id;
 
@@ -27,4 +31,7 @@ public class ItemDto {
     private Boolean available;
 
     private Long request;
+
+    private Instant lastBooking;
+    private Instant nextBooking;
 }

@@ -1,25 +1,39 @@
 package ru.practicum.shareit.request;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.validator.ValidAction;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
- * Класс описания запроса вещи
+ * Класс описания запроса
  */
-@Data
+@Entity
+@Setter
+@Getter
+@Table(name = "itemrequests", schema = "public")
+@AllArgsConstructor
+@NoArgsConstructor
 public class ItemRequest {
-    @NotNull(groups = {ValidAction.OnUpdate.class}, message = "id должен быть определен")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(max = 200, message = "Максимальная длина описания - 200 символов.",
+    @Size(max = 255, message = "Максимальная длина описания - 255 символов.",
             groups = {ValidAction.OnCreate.class, ValidAction.OnUpdate.class})
+    @Column(name = "description", nullable = false)
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User requestor;
-    private LocalDateTime created;
+
+    @Column(name = "created", nullable = false)
+    private Instant created = Instant.now();
 }

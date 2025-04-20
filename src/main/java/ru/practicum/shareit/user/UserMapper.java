@@ -3,6 +3,8 @@ package ru.practicum.shareit.user;
 import ru.practicum.shareit.user.dto.UserDto;
 
 public class UserMapper {
+    public static final String HEADER_USER_ID = "X-Sharer-User-Id";
+
     private UserMapper() {
     }
 

@@ -31,8 +31,8 @@ public class ItemRequest {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User requestor;
+    @JoinColumn(name = "customer_id")
+    private User customer;
 
     @Column(name = "created", nullable = false)
     private Instant created = Instant.now();

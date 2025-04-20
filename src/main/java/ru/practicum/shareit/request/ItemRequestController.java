@@ -20,6 +20,13 @@ public class ItemRequestController {
         this.itemRequestService = itemRequestService;
     }
 
+    /**
+     * Создаем новый запрос
+     * @param customerId - идентификатор заказчика
+     * @param itemRequestDto - объект описания запроса
+     * @return - сохраненный запрос
+     * @throws Exception
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ItemRequestDto createItemRequest(
@@ -28,5 +35,18 @@ public class ItemRequestController {
         log.info("Пользователь id={} делает заказ : {}", customerId, itemRequestDto.getDescription());
         return itemRequestService.create(customerId, itemRequestDto);
     }
-    
+
+    /**
+     * Поиск запроса по идентификатору
+     */
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ItemRequestDto findItemRequest(
+            @RequestHeader(UserMapper.HEADER_USER_ID) final Long userId,
+            @PathVariable final Long id) {
+        log.info("Пользователь id={} просматривает заказ id={}", userId, id);
+        return itemRequestService.findReqestsById(userId, id);
+    }
+
+
 }

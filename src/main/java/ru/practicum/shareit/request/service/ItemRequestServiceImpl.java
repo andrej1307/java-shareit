@@ -40,8 +40,12 @@ public class ItemRequestServiceImpl implements ItemRequestService{
     }
 
     @Override
-    public ItemRequestDto findReqestsId(Long Id) {
-        return null;
+    public ItemRequestDto findReqestsById(Long userId, Long id) {
+        User customer = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Не найден пользователь id=" + userId));
+        ItemRequest request = itemRequestRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Не найден запрос id=" + id));
+        return ItemRequestMapper.ToItemRequestDto(request);
     }
 
     @Override

@@ -3,6 +3,7 @@ package ru.practicum.shareit.item;
 import ru.practicum.shareit.item.dto.ItemCommentsDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.ItemRequestMapper;
 
 import java.util.List;
 
@@ -15,12 +16,11 @@ public class ItemMapper {
         itemDto.setId(item.getId());
         itemDto.setName(item.getName());
         itemDto.setDescription(item.getDescription());
-        itemDto.setAvailable(item.getAvailable());
-        if (item.getRequest() != null) {
-            itemDto.setRequest(item.getRequest().getId());
-        } else {
-            itemDto.setRequest(null);
+        if(item.getRequest() != null) {
+            itemDto.setRequest(ItemRequestMapper.ToItemRequestDto(item.getRequest()));
         }
+        itemDto.setAvailable(item.getAvailable());
+
         return itemDto;
     }
 
@@ -30,10 +30,8 @@ public class ItemMapper {
         itemDto.setName(item.getName());
         itemDto.setDescription(item.getDescription());
         itemDto.setAvailable(item.getAvailable());
-        if (item.getRequest() != null) {
-            itemDto.setRequest(item.getRequest().getId());
-        } else {
-            itemDto.setRequest(null);
+        if(item.getRequest() != null) {
+            itemDto.setRequest(ItemRequestMapper.ToItemRequestDto(item.getRequest()));
         }
         itemDto.setComments(List.of());
         return itemDto;
@@ -46,6 +44,9 @@ public class ItemMapper {
         item.setName(itemDto.getName());
         item.setDescription(itemDto.getDescription());
         item.setAvailable(itemDto.getAvailable());
+        if(itemDto.getRequest() != null) {
+            item.setRequest(ItemRequestMapper.ToItemRequest(itemDto.getRequest()));
+        }
         return item;
     }
 

@@ -6,6 +6,9 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.request.ItemRequest;
+import ru.practicum.shareit.request.ItemRequestMapper;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.validator.ValidAction;
 
 import java.time.Instant;
@@ -30,7 +33,7 @@ public class ItemDto {
     @NotNull(message = "Доступ должен быть определен.", groups = {ValidAction.OnCreate.class})
     private Boolean available;
 
-    private Long request;
+    private ItemRequestDto request;
 
     private Instant lastBooking;
     private Instant nextBooking;

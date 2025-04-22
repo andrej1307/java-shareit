@@ -13,4 +13,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             "WHERE (UPPER(it.name) LIKE UPPER(?1) OR UPPER(it.description) LIKE UPPER(?1))" +
             "AND it.available = TRUE")
     List<Item> findByNameOrDescriptionContainingIgnoreCase(String textSearch);
+
+    List<Item> findAllByRequest_IdEquals(Long requestId);
+
+    List<Item> findAllByRequest_IdIn(List<Long> requestIds);
 }

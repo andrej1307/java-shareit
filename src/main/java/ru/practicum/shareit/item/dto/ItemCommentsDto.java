@@ -12,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemCommentsDto {
-    List<CommentDto> comments;
     private Long id;
     private String name;
     private String description;
@@ -20,4 +19,5 @@ public class ItemCommentsDto {
     private ItemRequestDto request;
     private Instant lastBooking;
     private Instant nextBooking;
+    List<CommentDto> comments;
 }

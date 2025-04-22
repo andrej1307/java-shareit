@@ -2,6 +2,7 @@ package ru.practicum.shareit.item;
 
 import ru.practicum.shareit.item.dto.ItemCommentsDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemShortDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.ItemRequestMapper;
 
@@ -17,7 +18,7 @@ public class ItemMapper {
         itemDto.setName(item.getName());
         itemDto.setDescription(item.getDescription());
         if(item.getRequest() != null) {
-            itemDto.setRequest(ItemRequestMapper.ToItemRequestDto(item.getRequest()));
+            itemDto.setRequestId(item.getRequest().getId());
         }
         itemDto.setAvailable(item.getAvailable());
 
@@ -44,10 +45,14 @@ public class ItemMapper {
         item.setName(itemDto.getName());
         item.setDescription(itemDto.getDescription());
         item.setAvailable(itemDto.getAvailable());
-        if(itemDto.getRequest() != null) {
-            item.setRequest(ItemRequestMapper.ToItemRequest(itemDto.getRequest()));
-        }
         return item;
     }
 
+    public static ItemShortDto toItemShortDto(Item item) {
+        ItemShortDto itemDto = new ItemShortDto();
+        itemDto.setId(item.getId());
+        itemDto.setName(item.getName());
+        itemDto.setOwnerId(item.getOwner().getId());
+        return itemDto;
+    }
 }

@@ -5,6 +5,7 @@ import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.excepton.AccessDeniedException;
 import ru.practicum.shareit.excepton.NotFoundException;
+import ru.practicum.shareit.excepton.ValidationException;
 import ru.practicum.shareit.item.CommentMapper;
 import ru.practicum.shareit.item.ItemMapper;
 import ru.practicum.shareit.item.dto.CommentDto;
@@ -13,6 +14,8 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.ItemRequest;
+import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -26,15 +29,18 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final ItemRequestRepository requestRepository;
 
     public ItemServiceImpl(ItemRepository itemRepository,
                            UserRepository userRepository,
                            BookingRepository bookingRepository,
-                           CommentRepository commentRepository) {
+                           CommentRepository commentRepository,
+                           ItemRequestRepository requestRepository) {
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
         this.bookingRepository = bookingRepository;
         this.commentRepository = commentRepository;
+        this.requestRepository = requestRepository;
     }
 
     @Override
@@ -44,9 +50,18 @@ public class ItemServiceImpl implements ItemService {
 
         Item newItem = ItemMapper.toItem(itemDto);
         newItem.setOwner(owner);
+        Long requestId = itemDto.getRequestId();
+        if (requestId != null){
+            ItemRequest request = requestRepository.findById(requestId)
+                    .orElseThrow(() -> new ValidationException("Не найден запрос id=" + requestId));
+            newItem.setRequest(request);
+        } else {
+            newItem.setRequest(null);
+        }
         Item savedItem = itemRepository.save(newItem);
         return ItemMapper.toItemDto(savedItem);
     }
+
 
     @Override
     public ItemDto updateItem(ItemDto updItemDto, Long ownerId) {
@@ -62,15 +77,20 @@ public class ItemServiceImpl implements ItemService {
         if (!updItem.getOwner().equals(item.getOwner())) {
             throw new AccessDeniedException("Редактировать данные может только владелец вещи.");
         }
+        Long requestId = updItemDto.getRequestId();
+        if (requestId != null){
+            ItemRequest request = requestRepository.findById(requestId)
+                    .orElseThrow(() -> new ValidationException("Не найден запрос id=" + requestId));
+            item.setRequest(request);
+        } else {
+            item.setRequest(null);
+        }
 
         if (updItem.getName() != null) {
             item.setName(updItem.getName());
         }
         if (updItem.getDescription() != null) {
             item.setDescription(updItem.getDescription());
-        }
-        if (updItem.getRequest() != null) {
-            item.setRequest(updItem.getRequest());
         }
         if (updItem.getAvailable() != null) {
             item.setAvailable(updItem.getAvailable());

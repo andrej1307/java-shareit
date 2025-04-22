@@ -33,7 +33,7 @@ public class ItemDto {
     @NotNull(message = "Доступ должен быть определен.", groups = {ValidAction.OnCreate.class})
     private Boolean available;
 
-    private ItemRequestDto request;
+    private Long requestId;
 
     private Instant lastBooking;
     private Instant nextBooking;

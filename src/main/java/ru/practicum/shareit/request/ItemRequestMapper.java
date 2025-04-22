@@ -12,8 +12,8 @@ public class ItemRequestMapper {
         ItemRequest itemRequest = new ItemRequest();
         itemRequest.setId(requestDto.getId());
         itemRequest.setDescription(requestDto.getDescription());
-        if(requestDto.getCustomer() != null) {
-            itemRequest.setCustomer(UserMapper.toUser(requestDto.getCustomer()));
+        if(requestDto.getRequestor() != null) {
+            itemRequest.setCustomer(UserMapper.toUser(requestDto.getRequestor()));
         }
         itemRequest.setCreated(requestDto.getCreated());
         return itemRequest;
@@ -24,7 +24,7 @@ public class ItemRequestMapper {
         itemRequestDto.setId(itemRequest.getId());
         itemRequestDto.setDescription(itemRequest.getDescription());
         if(itemRequest.getCustomer() != null) {
-            itemRequestDto.setCustomer(UserMapper.toUserDto(itemRequest.getCustomer()));
+            itemRequestDto.setRequestor(UserMapper.toUserDto(itemRequest.getCustomer()));
         }
         itemRequestDto.setCreated(itemRequest.getCreated());
         return itemRequestDto;

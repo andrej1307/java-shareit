@@ -19,6 +19,6 @@ public class ItemRequestDto {
     @NotBlank(message = "Описание запроса не может быть пустым")
     private String description;
 
-    private UserDto customer;
+    private UserDto requestor;
     private Instant created;
 }

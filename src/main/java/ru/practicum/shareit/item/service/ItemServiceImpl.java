@@ -51,7 +51,7 @@ public class ItemServiceImpl implements ItemService {
         Item newItem = ItemMapper.toItem(itemDto);
         newItem.setOwner(owner);
         Long requestId = itemDto.getRequestId();
-        if (requestId != null){
+        if (requestId != null) {
             ItemRequest request = requestRepository.findById(requestId)
                     .orElseThrow(() -> new ValidationException("Не найден запрос id=" + requestId));
             newItem.setRequest(request);
@@ -78,7 +78,7 @@ public class ItemServiceImpl implements ItemService {
             throw new AccessDeniedException("Редактировать данные может только владелец вещи.");
         }
         Long requestId = updItemDto.getRequestId();
-        if (requestId != null){
+        if (requestId != null) {
             ItemRequest request = requestRepository.findById(requestId)
                     .orElseThrow(() -> new ValidationException("Не найден запрос id=" + requestId));
             item.setRequest(request);

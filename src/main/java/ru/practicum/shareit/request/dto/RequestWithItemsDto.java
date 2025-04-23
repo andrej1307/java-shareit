@@ -1,7 +1,5 @@
 package ru.practicum.shareit.request.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.dto.ItemShortDto;
@@ -12,9 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class RequestWithItemsDto {
-    private ItemRequestDto requestDto;
+    private Long id;
+    private String description;
+    private UserDto requestor;
+    private Instant created;
+
     private List<ItemShortDto> items = new ArrayList<>();
 }

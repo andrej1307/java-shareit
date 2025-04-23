@@ -27,7 +27,7 @@ public class ErrorAdvisor {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public List<ErrorMessage> onMethodArgumentNotValidException(
+    public ErrorMessage onMethodArgumentNotValidException(
             MethodArgumentNotValidException e
     ) {
         final List<ErrorMessage> violations = e.getBindingResult().getFieldErrors().stream()
@@ -35,7 +35,7 @@ public class ErrorAdvisor {
                         + error.getDefaultMessage()))
                 .collect(Collectors.toList());
         log.info("400 {}.", e.getMessage());
-        return violations;
+        return violations.get(0);
     }
 
     /**

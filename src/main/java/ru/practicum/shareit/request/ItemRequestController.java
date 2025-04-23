@@ -25,7 +25,8 @@ public class ItemRequestController {
 
     /**
      * Создаем новый запрос
-     * @param customerId - идентификатор заказчика
+     *
+     * @param customerId     - идентификатор заказчика
      * @param itemRequestDto - объект описания запроса
      * @return - сохраненный запрос
      * @throws Exception
@@ -34,7 +35,7 @@ public class ItemRequestController {
     @ResponseStatus(HttpStatus.CREATED)
     public ItemRequestDto createItemRequest(
             @RequestHeader(UserMapper.HEADER_USER_ID) final Long customerId,
-            @RequestBody final ItemRequestDto itemRequestDto ) throws Exception {
+            @RequestBody final ItemRequestDto itemRequestDto) throws Exception {
         log.info("Пользователь id={} делает заказ : {}", customerId, itemRequestDto.getDescription());
         return itemRequestService.create(customerId, itemRequestDto);
     }

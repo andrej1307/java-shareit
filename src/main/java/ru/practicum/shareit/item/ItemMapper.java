@@ -17,7 +17,7 @@ public class ItemMapper {
         itemDto.setId(item.getId());
         itemDto.setName(item.getName());
         itemDto.setDescription(item.getDescription());
-        if(item.getRequest() != null) {
+        if (item.getRequest() != null) {
             itemDto.setRequestId(item.getRequest().getId());
         }
         itemDto.setAvailable(item.getAvailable());
@@ -31,7 +31,7 @@ public class ItemMapper {
         itemDto.setName(item.getName());
         itemDto.setDescription(item.getDescription());
         itemDto.setAvailable(item.getAvailable());
-        if(item.getRequest() != null) {
+        if (item.getRequest() != null) {
             itemDto.setRequest(ItemRequestMapper.ToItemRequestDto(item.getRequest()));
         }
         itemDto.setComments(List.of());

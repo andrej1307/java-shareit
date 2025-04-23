@@ -25,7 +25,7 @@ import java.util.Map;
 
 @Service
 @Transactional(readOnly = true)
-public class ItemRequestServiceImpl implements ItemRequestService{
+public class ItemRequestServiceImpl implements ItemRequestService {
     private final ItemRequestRepository itemRequestRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
@@ -53,25 +53,24 @@ public class ItemRequestServiceImpl implements ItemRequestService{
 
     @Override
     public RequestWithItemsDto findReqestsById(Long userId, Long id) {
-        User customer = userRepository.findById(userId)
+        userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Не найден пользователь id=" + userId));
         ItemRequest request = itemRequestRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Не найден запрос id=" + id));
 
-        RequestWithItemsDto rwi = new RequestWithItemsDto();
-        rwi.setRequestDto(ItemRequestMapper.ToItemRequestDto(request));
+        RequestWithItemsDto rwi = ItemRequestMapper.ToRwiDto(request);
         List<ItemShortDto> items = itemRepository.findAllByRequest_IdEquals(id).stream()
-                        .map(ItemMapper::toItemShortDto)
-                        .toList();
+                .map(ItemMapper::toItemShortDto)
+                .toList();
         rwi.setItems(items);
         return rwi;
     }
 
     /**
-     * Поиск собственных запросов закзчика
+     * Поиск собственных запросов заказчика
      *
      * @param customerId - идентификатор заказчика
-     * @return - спмсок запросов с ответными предложениями вещей
+     * @return - список запросов с ответными предложениями вещей
      */
     @Override
     public List<RequestWithItemsDto> findReqestsByCustomerId(Long customerId) {
@@ -80,8 +79,8 @@ public class ItemRequestServiceImpl implements ItemRequestService{
 
         List<ItemRequest> reqests = itemRequestRepository.findAllByCustomer_IdEquals(
                 customerId, Sort.by("created").descending());
-            return addItemsToRequests(reqests);
-        }
+        return addItemsToRequests(reqests);
+    }
 
     @Override
     public List<RequestWithItemsDto> findAllReqests(Long customerId) {
@@ -98,8 +97,7 @@ public class ItemRequestServiceImpl implements ItemRequestService{
         Map<Long, RequestWithItemsDto> rwiDtoMap = new HashMap<>();
         for (int i = 0; i < requests.size(); i++) {
             ItemRequest itemRequest = requests.get(i);
-            RequestWithItemsDto rwiDto = new RequestWithItemsDto();
-            rwiDto.setRequestDto(ItemRequestMapper.ToItemRequestDto(itemRequest));
+            RequestWithItemsDto rwiDto = ItemRequestMapper.ToRwiDto(itemRequest);
             rwiDtos.add(rwiDto);
             rwiDtoMap.put(itemRequest.getId(), rwiDto);
         }

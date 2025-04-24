@@ -21,12 +21,6 @@ import ru.practicum.shareit.validator.ValidAction;
 public class UserController {
     private final UserClient userClient;
 
-    /*
-    public UserController(UserClient userClient) {
-        this.userClient = userClient;
-    }
-    */
-
     /**
      * Метод добавления нового пользователя.
      *

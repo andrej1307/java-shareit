@@ -68,7 +68,7 @@ public class BookingController {
     public List<BookingDto> findBookingByOwner(
             @RequestHeader(HEADER_USER_ID) final Long ownerId,
             @RequestParam(defaultValue = "ALL") SearchState state) {
-        log.info("Пользователь id={} просматривает запроcы на вои вещи", ownerId);
+        log.info("Пользователь id={} просматривает запроcы на вое вещи", ownerId);
         return bookingService.findBookingsByOwner(ownerId, state);
     }
 

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.validator.ValidAction;
 
@@ -71,6 +72,18 @@ public class ItemController {
             @PathVariable Long id) {
         log.info("пользователь id={}. Удаляет вещь id={}", ownerId, id);
         itemClient.deleteItem(id, ownerId);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Object> addComment(
+            @RequestHeader(HEADER_USER_ID) Long userId,
+            @PathVariable Long itemId,
+            @RequestBody CommentDto commentDto) {
+        log.info("Пользователь id={} добавляет комментарий для вещи id={}", userId, itemId);
+        commentDto.setAuthorId(userId);
+        commentDto.setItemId(itemId);
+        return itemClient.addComment(itemId, userId, commentDto);
     }
 
 }

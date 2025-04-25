@@ -14,12 +14,14 @@ import ru.practicum.shareit.validator.ValidAction;
 import java.util.Collection;
 
 /**
- * TODO Sprint add-controllers.
+ * Класс обработки запросов на работу с вешью
  */
 @Slf4j
 @RestController
 @RequestMapping("/items")
 public class ItemController {
+    private static final String HEADER_USER_ID = "X-Sharer-User-Id";
+
     private final ItemService itemService;
     private final CommentService commentService;
 
@@ -31,7 +33,7 @@ public class ItemController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<ItemDto> findAllItems(
-            @RequestHeader("X-Sharer-User-Id") final Long ownerId) {
+            @RequestHeader(HEADER_USER_ID) final Long ownerId) {
         log.info("Запрашиваем список вещей владельца id={}", ownerId);
         return itemService.getItemsByOwnerId(ownerId);
     }
@@ -39,7 +41,7 @@ public class ItemController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ItemCommentsDto findItem(@PathVariable Long id,
-                                    @RequestHeader("X-Sharer-User-Id") final Long userId) {
+                                    @RequestHeader(HEADER_USER_ID) final Long userId) {
         log.info("Польдователь id={} просматривает информацию о вещи id={}.", userId, id);
         return itemService.getItem(id, userId);
     }
@@ -54,7 +56,7 @@ public class ItemController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ItemDto createItem(
-            @RequestHeader("X-Sharer-User-Id") final Long ownerId,
+            @RequestHeader(HEADER_USER_ID) final Long ownerId,
             @Validated(ValidAction.OnCreate.class) @RequestBody ItemDto itemDto) {
         log.info("Пользователь id={} добавляет вещь : {}", ownerId, itemDto.toString());
         return itemService.addItem(itemDto, ownerId);
@@ -63,7 +65,7 @@ public class ItemController {
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ItemDto updateItem(
-            @RequestHeader("X-Sharer-User-Id") final Long ownerId,
+            @RequestHeader(HEADER_USER_ID) final Long ownerId,
             @PathVariable Long id,
             @RequestBody ItemDto itemDto) {
         log.info("Пользователь id={} обновляет сведения об элемете id={} {}", ownerId, id, itemDto);
@@ -74,7 +76,7 @@ public class ItemController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteItem(
-            @RequestHeader("X-Sharer-User-Id") final Long ownerId,
+            @RequestHeader(HEADER_USER_ID) final Long ownerId,
             @PathVariable Long id) {
         log.info("пользователь id={}. Удаляет вещь id={}", ownerId, id);
         itemService.deleteItem(id, ownerId);
@@ -90,7 +92,7 @@ public class ItemController {
     @PostMapping("/{itemId}/comment")
     @ResponseStatus(HttpStatus.CREATED)
     public CommentDto addComment(
-            @RequestHeader("X-Sharer-User-Id") final Long userId,
+            @RequestHeader(HEADER_USER_ID) final Long userId,
             @PathVariable Long itemId,
             @RequestBody CommentDto commentDto) {
         log.info("Пользователь id={} добавляет комментарий для вещи id={}", userId, itemId);

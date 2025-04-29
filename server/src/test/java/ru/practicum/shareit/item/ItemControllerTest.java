@@ -18,12 +18,12 @@ import ru.practicum.shareit.user.UserController;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -45,15 +45,7 @@ class ItemControllerTest {
 
     @Test
     void findAllItems() throws Exception {
-        List<ItemDto> sourceItems = new ArrayList<>();
-        int maxItems = 3;
-        for (int i = 1; i <= maxItems; i++) {
-            ItemDto itemDto = new ItemDto();
-            itemDto.setName("Item_" + i);
-            itemDto.setDescription("controller test get item_" + i);
-            itemDto.setAvailable(true);
-            sourceItems.add(itemDto);
-        }
+        List<ItemDto> sourceItems = makeItems(3);
 
         when(itemService.getItemsByOwnerId(anyLong()))
                 .thenReturn(sourceItems);
@@ -65,6 +57,24 @@ class ItemControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(sourceItems.size()));
+    }
+
+    @Test
+    public void onSearch() throws Exception {
+        List<ItemDto> sourceItems = makeItems(2);
+
+        when(itemService.searchItemsByText(anyString()))
+                .thenReturn(sourceItems);
+
+        mvc.perform(get("/items/search")
+                        .header(HEADER_USER_ID, 1L)
+                        .param("text", "test")
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(sourceItems.size()));
+
     }
 
     @Test
@@ -179,5 +189,18 @@ class ItemControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
+    }
+
+    private List<ItemDto> makeItems(Integer count) {
+        List<ItemDto> sourceItems = new ArrayList<>();
+        int maxItems = 3;
+        for (int i = 1; i <= count; i++) {
+            ItemDto itemDto = new ItemDto();
+            itemDto.setName("Item_" + i);
+            itemDto.setDescription("controller test item_" + i);
+            itemDto.setAvailable(true);
+            sourceItems.add(itemDto);
+        }
+        return sourceItems;
     }
 }

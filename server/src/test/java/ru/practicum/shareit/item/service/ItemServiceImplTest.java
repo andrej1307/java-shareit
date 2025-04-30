@@ -29,7 +29,7 @@ class ItemServiceImplTest {
      */
     @Test
     void getItemsByOwnerId() {
-        // создаем поельзователя - хозяина вещей
+        // создаем пользователя - хозяина вещей
         UserDto userDto = new UserDto();
         userDto.setName("User1");
         userDto.setEmail("user1@get.items.test");

@@ -48,7 +48,7 @@ public class ItemController {
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> onSearch(
-            @RequestHeader(HEADER_USER_ID) final Long userId,
+            @RequestHeader(HEADER_USER_ID) Long userId,
             @RequestParam(name = "text") String text) {
         log.info("Ищем вещи содержащие текст \"{}\" в названии или описании.", text);
         return itemClient.searchItemsByText(userId, text);

@@ -125,7 +125,6 @@ public class BookingServiceImpl implements BookingService {
         userRepository.findById(bookerId)
                 .orElseThrow(() ->
                         new NotFoundException("Не найден пользователь id=" + bookerId));
-
         List<Booking> bookings = new ArrayList<>();
         if (state.equals(SearchState.REJECTED)) {
             bookings = bookingRepository.findBookingsByBookerAndStatus(bookerId, BookingStatus.REJECTED);

@@ -38,7 +38,7 @@ public class BookingController {
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public BookingDto editBooking(
-            @RequestHeader(HEADER_USER_ID) final Long editorId,
+            @RequestHeader(HEADER_USER_ID) Long editorId,
             @PathVariable Long id,
             @RequestParam Boolean approved) {
         log.info("Пользователь id={} редактирует запрос на бронирование id={}", editorId, id);
@@ -58,7 +58,10 @@ public class BookingController {
     @ResponseStatus(HttpStatus.OK)
     public List<BookingDto> findBookingByBooker(
             @RequestHeader(HEADER_USER_ID) final Long bookerId,
-            @RequestParam(defaultValue = "ALL") SearchState state) {
+            @RequestParam(name = "state", defaultValue = "all") String stateParam) {
+        SearchState state = SearchState.from(stateParam)
+                .orElseThrow(() -> new IllegalArgumentException("Неизвестный режим: " + stateParam));
+
         log.info("Пользователь id={} просматривает свои запроcы на бронирование", bookerId);
         return bookingService.findBookingByBooker(bookerId, state);
     }
@@ -67,7 +70,10 @@ public class BookingController {
     @ResponseStatus(HttpStatus.OK)
     public List<BookingDto> findBookingByOwner(
             @RequestHeader(HEADER_USER_ID) final Long ownerId,
-            @RequestParam(defaultValue = "ALL") SearchState state) {
+            @RequestParam(name = "state", defaultValue = "all") String stateParam) {
+        SearchState state = SearchState.from(stateParam)
+                .orElseThrow(() -> new IllegalArgumentException("Неизвестный режим: " + stateParam));
+
         log.info("Пользователь id={} просматривает запроcы на все вещи", ownerId);
         return bookingService.findBookingsByOwner(ownerId, state);
     }

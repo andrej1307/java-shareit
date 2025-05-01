@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.excepton.InternalServerException;
+import ru.practicum.shareit.excepton.NotFoundException;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.RequestWithItemsDto;
 import ru.practicum.shareit.user.User;
@@ -54,8 +56,8 @@ class ItemRequestServiceImplTest {
 
 
     @Test
-    void findReqestsById() {
-        if (!requestId.equals(0)) {
+    void findReqestsById() throws NotFoundException, InternalServerException, Exception {
+        if (requestId.equals(0L)) {
             create();
         }
         RequestWithItemsDto rwi =
@@ -63,11 +65,17 @@ class ItemRequestServiceImplTest {
         assertNotNull(rwi, "Запрос не найден.");
         assertEquals( requestId, rwi.getId(),
                 "Идентификатор запроса не верен.");
+
+        assertThrows(NotFoundException.class,
+                () -> {
+                    itemRequestService.findReqestsById(userId, 1000L);
+                },
+                "Чтение Несуществующего запроса должно приводить к исключению.");
     }
 
     @Test
     void findReqestsByCustomerId() {
-        if (!userId.equals(0)) {
+        if (userId.equals(0L)) {
             create();
         }
         ItemRequestDto itemRequestDto = new ItemRequestDto();
@@ -84,7 +92,7 @@ class ItemRequestServiceImplTest {
 
     @Test
     void findAllReqests() {
-        if (!userId.equals(0)) {
+        if (userId.equals(0L)) {
             create();
         }
         ItemRequestDto itemRequestDto = new ItemRequestDto();

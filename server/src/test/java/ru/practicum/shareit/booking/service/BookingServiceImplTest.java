@@ -1,13 +1,18 @@
 package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.enums.BookingStatus;
+import ru.practicum.shareit.booking.enums.SearchState;
 import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.excepton.InternalServerException;
+import ru.practicum.shareit.excepton.NotFoundException;
+import ru.practicum.shareit.excepton.ValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.service.ItemRequestService;
@@ -16,6 +21,7 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,18 +32,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class BookingServiceImplTest {
 
-    private final ItemRequestService itemRequestService;
     private final UserRepository userRepository;
-    private final BookingRepository bookingRepository;
+    private final ItemRepository itemRepository;
+    private final BookingServiceImpl bookingServiceImpl;
 
     Long ownerId = 0L;
     Long itemId = 0L;
     Long userId = 0L;
     Long bookingId = 0L;
-    @Autowired
-    private ItemRepository itemRepository;
-    @Autowired
-    private BookingServiceImpl bookingServiceImpl;
+    BookingDto sourceBookingDto;
 
     @Test
     void addBooking() throws Exception {
@@ -68,28 +71,93 @@ class BookingServiceImplTest {
         BookingDto bookingDto = new BookingDto();
         bookingDto.setItemId(itemId);
         bookingDto.setBookerId(userId);
-        bookingDto.setStart(LocalDateTime.of(2025, 05, 12, 10, 10));
-        bookingDto.setEnd(LocalDateTime.of(2025, 05, 15, 10, 10));
+        bookingDto.setStart(LocalDateTime.of(2025, 04, 12, 10, 10));
+        bookingDto.setEnd(LocalDateTime.of(2025, 04, 15, 10, 10));
         bookingDto.setStatus(BookingStatus.WAITING);
 
-        BookingDto savedBookingDto = bookingServiceImpl.addBooking(bookingDto, userId);
-        assertThat(savedBookingDto.getId(), notNullValue());
-        bookingId = savedBookingDto.getId();
+        sourceBookingDto = bookingServiceImpl.addBooking(bookingDto, userId);
+        assertThat(sourceBookingDto.getId(), notNullValue());
+        bookingId = sourceBookingDto.getId();
     }
 
     @Test
-    void findBookingById() {
+    void findBookingById() throws Exception {
+        if (bookingId.equals(0L)) {
+            addBooking();
+        }
+
+        BookingDto bookingDto = bookingServiceImpl.findBookingById(
+                bookingId, userId);
+        assertThat(bookingDto, notNullValue());
+        AssertionsForClassTypes.assertThat(bookingDto)
+                .usingRecursiveComparison()
+                .isEqualTo(sourceBookingDto);
+
+        assertThrows(NotFoundException.class,
+                () -> {
+                    bookingServiceImpl.findBookingById(
+                            1000L, userId);
+                },
+                "Чтение Несуществующего бронирования должно приводить к исключению.");
     }
 
     @Test
-    void approvedBooking() {
+    void approvedBooking() throws Exception {
+        if (bookingId.equals(0L)) {
+            addBooking();
+        }
+
+        BookingDto bookingDto = bookingServiceImpl.approvedBooking(bookingId, ownerId, true);
+        assertNotNull(bookingDto);
+        assertEquals( bookingId, bookingDto.getId());
+
+        assertThrows(ValidationException.class,
+                () -> {
+                    bookingServiceImpl.approvedBooking(bookingId, userId, true);
+                },
+                "Изменение статуса бронирования не хозяином должно приводить к исключению.");
     }
 
     @Test
-    void findBookingsByOwner() {
+    void findBookingsByOwner() throws Exception  {
+        if (bookingId.equals(0L)) {
+            addBooking();
+        }
+        List<BookingDto> bookingDtoList = bookingServiceImpl.findBookingsByOwner(
+                                            ownerId, SearchState.PAST);
+        assertThat(bookingDtoList, notNullValue());
+        assertTrue(bookingDtoList.size() > 0);
+
+        bookingDtoList = bookingServiceImpl.findBookingsByOwner(
+                ownerId, SearchState.CURRENT);
+        assertThat(bookingDtoList, notNullValue());
+        assertTrue(bookingDtoList.isEmpty());
+
+        bookingDtoList = bookingServiceImpl.findBookingsByOwner(
+                ownerId, SearchState.FUTURE);
+        assertThat(bookingDtoList, notNullValue());
+        assertTrue(bookingDtoList.isEmpty());
     }
 
     @Test
-    void findBookingByBooker() {
+    void findBookingByBooker() throws Exception  {
+        if (bookingId.equals(0L)) {
+            addBooking();
+        }
+        List<BookingDto> bookingDtoList = bookingServiceImpl.findBookingByBooker(
+                userId, SearchState.PAST);
+        assertThat(bookingDtoList, notNullValue());
+        assertTrue(bookingDtoList.size() > 0);
+
+        bookingDtoList = bookingServiceImpl.findBookingByBooker(
+                userId, SearchState.CURRENT);
+        assertThat(bookingDtoList, notNullValue());
+        assertTrue(bookingDtoList.isEmpty());
+
+        bookingDtoList = bookingServiceImpl.findBookingByBooker(
+                userId, SearchState.FUTURE);
+        assertThat(bookingDtoList, notNullValue());
+        assertTrue(bookingDtoList.isEmpty());
+
     }
 }

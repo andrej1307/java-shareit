@@ -32,7 +32,7 @@ public class ItemMapper {
         itemDto.setDescription(item.getDescription());
         itemDto.setAvailable(item.getAvailable());
         if (item.getRequest() != null) {
-            itemDto.setRequest(ItemRequestMapper.ToItemRequestDto(item.getRequest()));
+            itemDto.setRequest(ItemRequestMapper.toItemRequestDto(item.getRequest()));
         }
         itemDto.setComments(List.of());
         return itemDto;

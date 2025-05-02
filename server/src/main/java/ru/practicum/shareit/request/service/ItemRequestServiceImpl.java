@@ -47,8 +47,8 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         itemRequestDto.setRequestor(UserMapper.toUserDto(customer));
         itemRequestDto.setCreated(Instant.now());
         ItemRequest savedItemRequest = itemRequestRepository.save(
-                ItemRequestMapper.ToItemRequest(itemRequestDto));
-        return ItemRequestMapper.ToItemRequestDto(savedItemRequest);
+                ItemRequestMapper.toItemRequest(itemRequestDto));
+        return ItemRequestMapper.toItemRequestDto(savedItemRequest);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         ItemRequest request = itemRequestRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Не найден запрос id=" + id));
 
-        RequestWithItemsDto rwi = ItemRequestMapper.ToRwiDto(request);
+        RequestWithItemsDto rwi = ItemRequestMapper.toRwiDto(request);
         List<ItemShortDto> items = itemRepository.findAllByRequest_IdEquals(id).stream()
                 .map(ItemMapper::toItemShortDto)
                 .toList();
@@ -97,7 +97,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         Map<Long, RequestWithItemsDto> rwiDtoMap = new HashMap<>();
         for (int i = 0; i < requests.size(); i++) {
             ItemRequest itemRequest = requests.get(i);
-            RequestWithItemsDto rwiDto = ItemRequestMapper.ToRwiDto(itemRequest);
+            RequestWithItemsDto rwiDto = ItemRequestMapper.toRwiDto(itemRequest);
             rwiDtos.add(rwiDto);
             rwiDtoMap.put(itemRequest.getId(), rwiDto);
         }

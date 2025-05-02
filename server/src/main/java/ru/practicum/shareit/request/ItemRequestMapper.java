@@ -8,7 +8,7 @@ public class ItemRequestMapper {
     private ItemRequestMapper() {
     }
 
-    public static ItemRequest ToItemRequest(ItemRequestDto requestDto) {
+    public static ItemRequest toItemRequest(ItemRequestDto requestDto) {
         ItemRequest itemRequest = new ItemRequest();
         itemRequest.setId(requestDto.getId());
         itemRequest.setDescription(requestDto.getDescription());
@@ -19,7 +19,7 @@ public class ItemRequestMapper {
         return itemRequest;
     }
 
-    public static ItemRequestDto ToItemRequestDto(ItemRequest itemRequest) {
+    public static ItemRequestDto toItemRequestDto(ItemRequest itemRequest) {
         ItemRequestDto itemRequestDto = new ItemRequestDto();
         itemRequestDto.setId(itemRequest.getId());
         itemRequestDto.setDescription(itemRequest.getDescription());
@@ -30,7 +30,7 @@ public class ItemRequestMapper {
         return itemRequestDto;
     }
 
-    public static RequestWithItemsDto ToRwiDto(ItemRequest itemRequest) {
+    public static RequestWithItemsDto toRwiDto(ItemRequest itemRequest) {
         RequestWithItemsDto itemRequestDto = new RequestWithItemsDto();
         itemRequestDto.setId(itemRequest.getId());
         itemRequestDto.setDescription(itemRequest.getDescription());

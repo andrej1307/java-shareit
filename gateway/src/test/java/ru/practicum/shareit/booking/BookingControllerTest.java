@@ -50,7 +50,7 @@ class BookingControllerTest {
             LocalDateTime.of(2025, 04, 12, 10, 10),
             LocalDateTime.of(2025, 04, 15, 10, 10),
             1L,
-            new ItemDto(1l, "Iteem", "Description", true, null, null, null),
+            new ItemDto(1L, "Iteem", "Description", true, null, null, null),
             2L,
             new UserDto(2L, "User", "user@booking.controller.test"),
             BookingStatus.WAITING);

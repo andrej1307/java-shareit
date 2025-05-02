@@ -24,8 +24,8 @@ class BookingDtoTest {
         bookingDto.setId(1L);
         bookingDto.setStart(LocalDateTime.now());
         bookingDto.setEnd(LocalDateTime.now().plusDays(1));
-        bookingDto.setItemId(1l);
-        bookingDto.setBookerId(1l);
+        bookingDto.setItemId(1L);
+        bookingDto.setBookerId(1L);
         bookingDto.setStatus(BookingStatus.APPROVED);
 
         JsonContent<BookingDto> result = json.write(bookingDto);

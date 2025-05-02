@@ -11,14 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.user.UserController;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -31,13 +29,6 @@ class ItemControllerTest {
 
     @Autowired
     ObjectMapper mapper;
-
-    @MockBean
-    private ItemClient itemClient;
-
-    @Autowired
-    private MockMvc mvc;
-
     ItemDto testItemDto = new ItemDto(
             1L,
             "Item1",
@@ -46,9 +37,13 @@ class ItemControllerTest {
             null,
             null,
             null);
+    @MockBean
+    private ItemClient itemClient;
+    @Autowired
+    private MockMvc mvc;
 
     @Test
-    void createItem() throws Exception{
+    void createItem() throws Exception {
         ResponseEntity<Object> response = new ResponseEntity<>(
                 testItemDto, HttpStatus.CREATED);
         when(itemClient.createItem(anyLong(), any()))
@@ -67,7 +62,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void findItem() throws Exception{
+    void findItem() throws Exception {
         ResponseEntity<Object> response = new ResponseEntity<>(
                 testItemDto, HttpStatus.OK);
         when(itemClient.findItemById(anyLong(), anyLong()))
@@ -83,7 +78,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void findAllItems() throws Exception{
+    void findAllItems() throws Exception {
         List<ItemDto> itemDtos = new ArrayList<>();
         itemDtos.add(testItemDto);
         ResponseEntity<Object> response = new ResponseEntity<>(
@@ -101,7 +96,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void onSearch() throws Exception{
+    void onSearch() throws Exception {
         List<ItemDto> itemDtos = new ArrayList<>();
         itemDtos.add(testItemDto);
         ResponseEntity<Object> response = new ResponseEntity<>(
@@ -119,7 +114,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void updateItem() throws Exception{
+    void updateItem() throws Exception {
         ResponseEntity<Object> response = new ResponseEntity<>(
                 testItemDto, HttpStatus.OK);
         when(itemClient.updateItem(anyLong(), anyLong(), any()))
@@ -136,7 +131,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void addComment() throws Exception{
+    void addComment() throws Exception {
         CommentDto commentDto = new CommentDto();
         commentDto.setItemId(testItemDto.getId());
         commentDto.setText("Comment text");

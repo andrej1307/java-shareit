@@ -1,12 +1,9 @@
 package ru.practicum.shareit.request.service;
 
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.excepton.InternalServerException;
 import ru.practicum.shareit.excepton.NotFoundException;
@@ -17,13 +14,10 @@ import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
 
 @Transactional
 @SpringBootTest
@@ -63,7 +57,7 @@ class ItemRequestServiceImplTest {
         RequestWithItemsDto rwi =
                 itemRequestService.findReqestsById(userId, requestId);
         assertNotNull(rwi, "Запрос не найден.");
-        assertEquals( requestId, rwi.getId(),
+        assertEquals(requestId, rwi.getId(),
                 "Идентификатор запроса не верен.");
 
         assertThrows(NotFoundException.class,

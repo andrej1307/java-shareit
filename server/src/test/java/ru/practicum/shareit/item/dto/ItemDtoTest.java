@@ -30,6 +30,7 @@ class ItemDtoTest {
         assertThat(result).extractingJsonPathStringValue("$.name").isEqualTo("Item");
         assertThat(result).extractingJsonPathStringValue("$.description").isEqualTo("Test item");
         assertThat(result).extractingJsonPathBooleanValue("$.available").isEqualTo(true);
+        assertThat(result).extractingJsonPathBooleanValue("$.requestId").isEqualTo(null);
     }
 
 }

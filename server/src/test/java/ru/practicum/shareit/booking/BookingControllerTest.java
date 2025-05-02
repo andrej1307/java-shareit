@@ -10,10 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.enums.BookingStatus;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.booking.service.BookingServiceImpl;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.request.ItemRequestController;
-import ru.practicum.shareit.request.service.ItemRequestService;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import java.nio.charset.StandardCharsets;
@@ -22,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -39,15 +35,15 @@ class BookingControllerTest {
     @MockBean
     private BookingService bookingService;
 
-    private  BookingDto testBookingDto = new BookingDto(
+    private BookingDto testBookingDto = new BookingDto(
             1L,
             LocalDateTime.of(2025, 04, 12, 10, 10),
             LocalDateTime.of(2025, 04, 15, 10, 10),
             1L,
-            new ItemDto(1l, "Iteem", "Description", true, null, null,null),
+            new ItemDto(1l, "Iteem", "Description", true, null, null, null),
             2L,
             new UserDto(2L, "User", "user@booking.controller.test"),
-            BookingStatus.WAITING );
+            BookingStatus.WAITING);
 
     @Autowired
     private MockMvc mvc;

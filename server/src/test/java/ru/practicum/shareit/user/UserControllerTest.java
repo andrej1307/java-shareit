@@ -24,24 +24,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = UserController.class)
 class UserControllerTest {
-    @Autowired
-    ObjectMapper mapper;
-
     @MockBean
     private final UserService userService;
-
+    @Autowired
+    ObjectMapper mapper;
     @Autowired
     private MockMvc mvc;
+    private UserDto userDto = new UserDto(
+            1L,
+            "User Test",
+            "user@controller.test");
 
     @Autowired
     public UserControllerTest(UserService userService) {
         this.userService = userService;
     }
-
-    private UserDto userDto = new UserDto(
-            1L,
-            "User Test",
-            "user@controller.test");
 
     @Test
     void findAllUser() throws Exception {

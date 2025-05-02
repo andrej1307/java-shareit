@@ -2,9 +2,9 @@ package ru.practicum.shareit.booking.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.booking.enums.BookingStatus;
+import lombok.Setter;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.validator.ValidAction;
@@ -14,7 +14,8 @@ import java.time.LocalDateTime;
 /**
  * DTO класс бронирования
  */
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookingDto {
@@ -34,3 +35,4 @@ public class BookingDto {
 
     private BookingStatus status = BookingStatus.WAITING;
 }
+

@@ -9,12 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.excepton.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemCommentsDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -130,7 +128,7 @@ class ItemServiceImplTest {
         List<ItemDto> sourceItems = makeItems(ownerId, 3);
 
         List<ItemDto> targetItems = itemService.searchItemsByText("Item_2")
-                                        .stream().toList();
+                .stream().toList();
         assertNotNull(targetItems);
         assertTrue(targetItems.size() > 0);
     }

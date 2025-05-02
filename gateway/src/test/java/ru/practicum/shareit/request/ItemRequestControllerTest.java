@@ -9,8 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.item.ItemClient;
-import ru.practicum.shareit.item.ItemController;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.user.dto.UserDto;
 
@@ -20,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -35,18 +32,15 @@ class ItemRequestControllerTest {
 
     @Autowired
     ObjectMapper mapper;
-
-    @MockBean
-    private ItemRequestClient itemRequestClient;
-
-    @Autowired
-    private MockMvc mvc;
-
     ItemRequestDto itemRequestDto = new ItemRequestDto(
             1L,
             "Request text.",
             new UserDto(1L, "user", "user@request.test"),
             Instant.now());
+    @MockBean
+    private ItemRequestClient itemRequestClient;
+    @Autowired
+    private MockMvc mvc;
 
     @Test
     void createItemRequest() throws Exception {
@@ -82,7 +76,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void findRequestsByUserId() throws Exception  {
+    void findRequestsByUserId() throws Exception {
         ResponseEntity<Object> response = new ResponseEntity<>(
                 itemRequestDto, HttpStatus.OK);
         when(itemRequestClient.findRequestsByCustomerId(anyLong()))
@@ -98,7 +92,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void findAllRequests() throws Exception  {
+    void findAllRequests() throws Exception {
         List<ItemRequestDto> itemRequestDtos = new ArrayList<>();
         itemRequestDtos.add(itemRequestDto);
 

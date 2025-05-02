@@ -2,17 +2,14 @@ package ru.practicum.shareit.request;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.RequestWithItemsDto;
 import ru.practicum.shareit.request.service.ItemRequestService;
-import ru.practicum.shareit.user.UserController;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import java.nio.charset.StandardCharsets;
@@ -21,11 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,7 +44,7 @@ class ItemRequestControllerTest {
         ItemRequestDto itemRequestDto = new ItemRequestDto();
         itemRequestDto.setId(1L);
         itemRequestDto.setDescription("description");
-        itemRequestDto.setRequestor(new UserDto(1L, "user","user@request.crate.test"));
+        itemRequestDto.setRequestor(new UserDto(1L, "user", "user@request.crate.test"));
         itemRequestDto.setCreated(Instant.now());
 
         when(itemRequestService.create(anyLong(), any()))
@@ -66,11 +63,11 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void findItemRequest() throws Exception{
+    void findItemRequest() throws Exception {
         RequestWithItemsDto rwi = new RequestWithItemsDto();
         rwi.setId(1L);
         rwi.setDescription("description");
-        rwi.setRequestor(new UserDto(1L, "user","user@request.crate.test"));
+        rwi.setRequestor(new UserDto(1L, "user", "user@request.crate.test"));
         rwi.setCreated(Instant.now());
         when(itemRequestService.findReqestsById(anyLong(), anyLong()))
                 .thenReturn(rwi);
@@ -88,7 +85,7 @@ class ItemRequestControllerTest {
 
     @Test
     void findRequestsByUserId() throws Exception {
-        List<RequestWithItemsDto> rwiList =makeRequests(2);
+        List<RequestWithItemsDto> rwiList = makeRequests(2);
 
         when(itemRequestService.findReqestsByCustomerId(anyLong()))
                 .thenReturn(rwiList);
@@ -103,7 +100,7 @@ class ItemRequestControllerTest {
 
     @Test
     void findAllRequests() throws Exception {
-        List<RequestWithItemsDto> rwiList =makeRequests(3);
+        List<RequestWithItemsDto> rwiList = makeRequests(3);
 
         when(itemRequestService.findAllReqests(anyLong()))
                 .thenReturn(rwiList);
@@ -123,7 +120,7 @@ class ItemRequestControllerTest {
             RequestWithItemsDto rwi = new RequestWithItemsDto();
             rwi.setId((long) i);
             rwi.setDescription("controller test item_" + i);
-            rwi.setRequestor(new UserDto(1L, "user","user@request.crate.test"));
+            rwi.setRequestor(new UserDto(1L, "user", "user@request.crate.test"));
             rwi.setCreated(Instant.now().plusSeconds(60 * i));
             rwiList.add(rwi);
         }

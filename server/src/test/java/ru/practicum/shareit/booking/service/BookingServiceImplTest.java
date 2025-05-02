@@ -9,15 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.enums.BookingStatus;
 import ru.practicum.shareit.booking.enums.SearchState;
-import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shareit.excepton.InternalServerException;
 import ru.practicum.shareit.excepton.NotFoundException;
 import ru.practicum.shareit.excepton.ValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.request.service.ItemRequestService;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
@@ -109,7 +105,7 @@ class BookingServiceImplTest {
 
         BookingDto bookingDto = bookingServiceImpl.approvedBooking(bookingId, ownerId, true);
         assertNotNull(bookingDto);
-        assertEquals( bookingId, bookingDto.getId());
+        assertEquals(bookingId, bookingDto.getId());
 
         assertThrows(ValidationException.class,
                 () -> {
@@ -119,12 +115,12 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void findBookingsByOwner() throws Exception  {
+    void findBookingsByOwner() throws Exception {
         if (bookingId.equals(0L)) {
             addBooking();
         }
         List<BookingDto> bookingDtoList = bookingServiceImpl.findBookingsByOwner(
-                                            ownerId, SearchState.PAST);
+                ownerId, SearchState.PAST);
         assertThat(bookingDtoList, notNullValue());
         assertTrue(bookingDtoList.size() > 0);
 
@@ -140,7 +136,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void findBookingByBooker() throws Exception  {
+    void findBookingByBooker() throws Exception {
         if (bookingId.equals(0L)) {
             addBooking();
         }

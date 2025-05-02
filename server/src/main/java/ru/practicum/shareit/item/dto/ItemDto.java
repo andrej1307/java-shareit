@@ -33,6 +33,10 @@ public class ItemDto {
 
     private Long requestId;
 
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Instant lastBooking;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Instant nextBooking;
 }

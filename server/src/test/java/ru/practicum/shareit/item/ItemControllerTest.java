@@ -13,16 +13,13 @@ import ru.practicum.shareit.item.dto.ItemCommentsDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.CommentService;
 import ru.practicum.shareit.item.service.ItemService;
-import ru.practicum.shareit.user.UserController;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -122,26 +119,26 @@ class ItemControllerTest {
                 .andExpect(jsonPath("$.description", is(itemDto.getDescription())));
     }
 
-@Test
+    @Test
     void updateItem() throws Exception {
-    ItemDto itemDto = new ItemDto();
-    itemDto.setId(1L);
-    itemDto.setName("Name item4");
-    itemDto.setDescription("controller test update item");
-    itemDto.setAvailable(true);
+        ItemDto itemDto = new ItemDto();
+        itemDto.setId(1L);
+        itemDto.setName("Name item4");
+        itemDto.setDescription("controller test update item");
+        itemDto.setAvailable(true);
 
-    when(itemService.updateItem(any(), anyLong()))
-            .thenReturn(itemDto);
-    mvc.perform(patch("/items/1")
-                    .header(HEADER_USER_ID, 1L)
-                    .content(mapper.writeValueAsString(itemDto))
-                    .characterEncoding(StandardCharsets.UTF_8)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(itemDto.getId()), Long.class))
-            .andExpect(jsonPath("$.name", is(itemDto.getName())))
-            .andExpect(jsonPath("$.description", is(itemDto.getDescription())));
+        when(itemService.updateItem(any(), anyLong()))
+                .thenReturn(itemDto);
+        mvc.perform(patch("/items/1")
+                        .header(HEADER_USER_ID, 1L)
+                        .content(mapper.writeValueAsString(itemDto))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(itemDto.getId()), Long.class))
+                .andExpect(jsonPath("$.name", is(itemDto.getName())))
+                .andExpect(jsonPath("$.description", is(itemDto.getDescription())));
     }
 
     @Test

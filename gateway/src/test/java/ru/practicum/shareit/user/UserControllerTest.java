@@ -27,17 +27,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerTest {
     @Autowired
     ObjectMapper mapper;
-
-    @MockBean
-    private UserClient userClient;
-
-    @Autowired
-    private MockMvc mvc;
-
     UserDto testUserDto = new UserDto(
             1L,
             "tetUser",
             "test_user@gateway.test");
+    @MockBean
+    private UserClient userClient;
+    @Autowired
+    private MockMvc mvc;
 
     @Test
     void addNewUser() throws Exception {

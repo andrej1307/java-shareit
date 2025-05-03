@@ -3,7 +3,6 @@ package ru.practicum.shareit.user.service;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.excepton.NotFoundException;
@@ -21,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Тестирование сервиса работы с пользователями
  */
-@JdbcTest
 @Transactional
 @SpringBootTest
 @RequiredArgsConstructor(onConstructor_ = @Autowired)

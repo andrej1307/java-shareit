@@ -3,7 +3,6 @@ package ru.practicum.shareit.request.service;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.excepton.InternalServerException;
@@ -20,7 +19,6 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@JdbcTest
 @Transactional
 @SpringBootTest
 @RequiredArgsConstructor(onConstructor_ = @Autowired)

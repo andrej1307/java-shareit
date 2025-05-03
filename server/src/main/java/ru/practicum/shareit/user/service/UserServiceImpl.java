@@ -11,11 +11,7 @@ import java.util.Collection;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
-
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private UserRepository userRepository;
 
     @Override
     public UserDto createUser(UserDto newUserDto) {
@@ -26,8 +22,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() ->
-                        new NotFoundException("Пользователь не найден id=" + id));
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден id=" + id));
         return UserMapper.toUserDto(user);
     }
 
@@ -35,8 +30,7 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(UserDto updUserDto) {
         Long id = updUserDto.getId();
         User user = userRepository.findById(id)
-                .orElseThrow(() ->
-                        new NotFoundException("Пользователь не найден id=" + id));
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден id=" + id));
         if (updUserDto.getName() != null) {
             user.setName(updUserDto.getName());
         }

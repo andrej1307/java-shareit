@@ -45,13 +45,10 @@ public class BookingServiceImpl implements BookingService {
             throw new ValidationException("Отсутствуют сведения о заказчике.");
         }
         User user = userRepository.findById(userId)
-                .orElseThrow(() ->
-                        new NotFoundException("Не найден пользователь id=" + userId));
+                .orElseThrow(() -> new NotFoundException("Не найден пользователь id=" + userId));
 
         Item item = itemRepository.findById(bookingDto.getItemId())
-                .orElseThrow(() ->
-                        new NotFoundException("Не найдена вещ id=" +
-                                bookingDto.getItemId()));
+                .orElseThrow(() -> new NotFoundException("Не найдена вещ id=" + bookingDto.getItemId()));
         if (!item.getAvailable()) {
             throw new ValidationException(ItemMapper.toItemDto(item) + " Недоступна для бронирования.");
         }
@@ -64,16 +61,14 @@ public class BookingServiceImpl implements BookingService {
         Booking savedBooking = bookingRepository.save(booking);
         Long bookingId = savedBooking.getId();
         savedBooking = bookingRepository.findById(bookingId)
-                .orElseThrow(() ->
-                        new InternalServerException("Ошибка при добавлении запроса на бронирование."));
+                .orElseThrow(() -> new InternalServerException("Ошибка при добавлении запроса на бронирование."));
         return BookingMapper.toBookingDto(savedBooking);
     }
 
     @Override
     public BookingDto findBookingById(Long bookingId, Long userId) {
         Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() ->
-                        new NotFoundException("Не найден запрос на бронирование id=" + bookingId));
+                .orElseThrow(() -> new NotFoundException("Не найден запрос на бронирование id=" + bookingId));
         if (!booking.getBooker().getId().equals(userId) &&
                 !booking.getItem().getOwner().getId().equals(userId)) {
             throw new AccessDeniedException("Пользователь id=" + userId + " не является автором запроса или хозяином вещи.");
@@ -84,8 +79,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingDto approvedBooking(Long id, Long editorId, Boolean approved) {
         Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() ->
-                        new NotFoundException("Не найден запрос id=" + id));
+                .orElseThrow(() -> new NotFoundException("Не найден запрос id=" + id));
         if (!booking.getItem().getOwner().getId().equals(editorId)) {
             throw new ValidationException("Пользователь id=" + editorId + " не является хозяином.");
         }
@@ -101,8 +95,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDto> findBookingsByOwner(Long ownerId, SearchState state) {
         userRepository.findById(ownerId)
-                .orElseThrow(() ->
-                        new NotFoundException("Не найден пользователь id=" + ownerId));
+                .orElseThrow(() -> new NotFoundException("Не найден пользователь id=" + ownerId));
         List<Booking> bookings = new ArrayList<>();
         if (state.equals(SearchState.ALL)) {
             bookings = bookingRepository.findAllByItem_OwnerIdOrderByStartDesc(ownerId);

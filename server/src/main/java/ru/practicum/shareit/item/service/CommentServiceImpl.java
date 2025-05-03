@@ -39,34 +39,26 @@ public class CommentServiceImpl implements CommentService {
         Long userId = commentDto.getAuthorId();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден id=" + userId));
-
         Long itemId = commentDto.getItemId();
         Booking booking = bookingRepository.findBookingsByBookerIdAndItemId(userId, itemId);
         if (booking == null) {
-            throw new NotFoundException("Пользователь id=" + userId +
-                    " не бронировал вещь id=" + itemId);
+            throw new NotFoundException("Пользователь id=" + userId + " не бронировал вещь id=" + itemId);
         }
-
         LocalDateTime now = LocalDateTime.now();
         if (LocalDateTime.ofInstant(booking.getEnd(), ZoneOffset.UTC).isAfter(now)) {
             throw new ValidationException("Комментарий возможен после завершения срока аренды. " +
-                    "Конец аренды : " + LocalDateTime.ofInstant(booking.getEnd(), ZoneOffset.UTC) +
-                    " Текущее время : " + now);
+                    "Конец аренды : " + LocalDateTime.ofInstant(booking.getEnd(), ZoneOffset.UTC) + " Текущее время : " + now);
         }
-
         Item item = booking.getItem();
         if (item.getOwner().getId().equals(userId)) {
             throw new ValidationException("Хозяину нельзя оставлять комментарий.");
         }
-
         Comment comment = new Comment();
         comment.setAuthor(user);
         comment.setItem(item);
         comment.setText(commentDto.getText());
         comment.setCreated(Instant.now());
-
         Comment savedComment = commentRepository.save(comment);
         return CommentMapper.toDto(savedComment);
     }
-
 }

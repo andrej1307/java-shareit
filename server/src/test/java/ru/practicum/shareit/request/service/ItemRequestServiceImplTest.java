@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.excepton.InternalServerException;
 import ru.practicum.shareit.excepton.NotFoundException;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.RequestWithItemsDto;
@@ -50,7 +49,7 @@ class ItemRequestServiceImplTest {
 
 
     @Test
-    void findReqestsById() throws NotFoundException, InternalServerException, Exception {
+    void findReqestsById() throws NotFoundException, Exception {
         if (requestId.equals(0L)) {
             create();
         }

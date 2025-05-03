@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.enums.BookingStatus;
 import ru.practicum.shareit.booking.enums.SearchState;
+import ru.practicum.shareit.excepton.InternalServerException;
 import ru.practicum.shareit.excepton.NotFoundException;
 import ru.practicum.shareit.excepton.ValidationException;
 import ru.practicum.shareit.item.model.Item;
@@ -74,6 +75,13 @@ class BookingServiceImplTest {
         sourceBookingDto = bookingServiceImpl.addBooking(bookingDto, userId);
         assertThat(sourceBookingDto.getId(), notNullValue());
         bookingId = sourceBookingDto.getId();
+
+        assertThrows(InternalServerException.class,
+                () -> {
+                    bookingDto.setItemId(null);
+                    bookingServiceImpl.addBooking(bookingDto, userId);
+                },
+                "Некорректные данные должны приводить к исключению.");
     }
 
     @Test

@@ -7,7 +7,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.shareit.excepton.*;
+import ru.practicum.shareit.excepton.AccessDeniedException;
+import ru.practicum.shareit.excepton.InternalServerException;
+import ru.practicum.shareit.excepton.NotFoundException;
+import ru.practicum.shareit.excepton.ValidationException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -86,12 +89,6 @@ public class ErrorAdvisor {
         return new ErrorMessage(e.getMessage());
     }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorMessage onConflictException(final ConflictException e) {
-        log.warn("409 {}", e.getMessage());
-        return new ErrorMessage(e.getMessage());
-    }
 
     /**
      * Обработка непредвиденного исключения

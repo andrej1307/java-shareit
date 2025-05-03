@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.excepton.AccessDeniedException;
 import ru.practicum.shareit.excepton.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemCommentsDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -30,6 +31,7 @@ class ItemServiceImplTest {
     Long ownerId = 0L;
     Long itemId = 0L;
     ItemDto testItemDto;
+    Long testUserId = 0L;
 
     @BeforeEach
     void setUp() {
@@ -41,6 +43,12 @@ class ItemServiceImplTest {
             UserDto savedUserDto = userService.createUser(userDto);
             assertThat(savedUserDto.getId(), notNullValue());
             ownerId = savedUserDto.getId();
+
+            userDto = new UserDto();
+            userDto.setName("User2");
+            userDto.setEmail("user2@items.test");
+            savedUserDto = userService.createUser(userDto);
+            testUserId = savedUserDto.getId();
         }
         itemService.deleteAllItems();
     }
@@ -72,6 +80,12 @@ class ItemServiceImplTest {
         ItemDto itemDto = itemService.updateItem(updItemDto, ownerId);
         assertThat(itemDto.getId(), notNullValue());
         assertEquals(itemDto.getDescription(), updItemDto.getDescription());
+
+        assertThrows(AccessDeniedException.class,
+                () -> {
+                    itemService.updateItem(updItemDto, testUserId);
+                },
+                "редактирование не хозяином вещи должно приводить к исключению.");
     }
 
     @Test

@@ -11,4 +11,9 @@ class ShareItServerTest {
     @Test
     void contextLoads() throws Exception {
     }
+
+    @Test
+    public void testMain() {
+        ShareItServer.main(new String[]{});
+    }
 }

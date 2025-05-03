@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,7 +40,7 @@ class UserServiceImplTest {
         assertThat(savedUserDto.getName(), equalTo(userDto.getName()));
     }
 
-     @Test
+    @Test
     void getUserById() {
         UserDto userDto = new UserDto(1L,
                 "User Test getById",

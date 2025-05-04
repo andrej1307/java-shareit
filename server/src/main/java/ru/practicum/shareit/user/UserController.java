@@ -100,5 +100,4 @@ public class UserController {
         log.info("Удаляем пользователя id={}.", id);
         userService.deleteUser(id);
     }
-
 }

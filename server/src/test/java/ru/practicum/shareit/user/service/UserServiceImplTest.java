@@ -55,6 +55,12 @@ class UserServiceImplTest {
         assertThat(userDto2)
                 .usingRecursiveComparison()
                 .isEqualTo(savedUserDto);
+
+        assertThrows(NotFoundException.class,
+                () -> {
+                    userService.getUserById(100L);
+                },
+                "Чтение несуществующего пользователя должно приводить к исключению.");
     }
 
     @Test
@@ -92,9 +98,9 @@ class UserServiceImplTest {
 
         assertThrows(NotFoundException.class,
                 () -> {
-                    userService.getUserById(userId);
+                    userService.deleteUser(1000L);
                 },
-                "Чтение удаленного пользователя должно приводить к исключению.");
+                "Удаление несуществующего пользователя должно приводить к исключению.");
     }
 
     @Test

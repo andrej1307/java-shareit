@@ -127,8 +127,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void deleteItem(Long id, Long ownerId) {
         Item item = itemRepository.findById(id)
-                .orElseThrow(() ->
-                        new NotFoundException("Не найдена вещь id=" + id));
+                .orElseThrow(() -> new NotFoundException("Не найдена вещь id=" + id));
         if (!item.getOwner().getId().equals(ownerId)) {
             throw new AccessDeniedException("Удалять вещь может только хозяин.");
         }

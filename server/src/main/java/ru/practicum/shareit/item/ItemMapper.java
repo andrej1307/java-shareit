@@ -21,7 +21,6 @@ public class ItemMapper {
             itemDto.setRequestId(item.getRequest().getId());
         }
         itemDto.setAvailable(item.getAvailable());
-
         return itemDto;
     }
 
@@ -36,7 +35,6 @@ public class ItemMapper {
         }
         itemDto.setComments(List.of());
         return itemDto;
-
     }
 
     public static Item toItem(ItemDto itemDto) {

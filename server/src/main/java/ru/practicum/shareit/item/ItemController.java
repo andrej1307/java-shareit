@@ -100,5 +100,4 @@ public class ItemController {
         commentDto.setItemId(itemId);
         return commentService.addComment(commentDto);
     }
-
 }

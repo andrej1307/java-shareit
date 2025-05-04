@@ -89,7 +89,6 @@ public class ErrorAdvisor {
         return new ErrorMessage(e.getMessage());
     }
 
-
     /**
      * Обработка непредвиденного исключения
      *

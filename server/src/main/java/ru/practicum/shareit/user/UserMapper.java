@@ -20,7 +20,6 @@ public class UserMapper {
         return new User(
                 userDto.getId(),
                 userDto.getName(),
-                userDto.getEmail()
-        );
+                userDto.getEmail());
     }
 }

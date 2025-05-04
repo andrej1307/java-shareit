@@ -13,6 +13,10 @@ import java.util.Collection;
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Override
     public UserDto createUser(UserDto newUserDto) {
         User user = userRepository.save(UserMapper.toUser(newUserDto));

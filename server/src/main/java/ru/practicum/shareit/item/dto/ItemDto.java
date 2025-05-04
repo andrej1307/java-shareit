@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -19,24 +18,15 @@ import java.time.Instant;
 @NoArgsConstructor
 public class ItemDto {
     private Long id;
-
     @NotBlank(message = "Имя не может быть пустым", groups = {ValidAction.OnCreate.class})
     private String name;
-
     @NotBlank(message = "Описание не может быть пустым", groups = {ValidAction.OnCreate.class})
     @Size(max = 200, message = "Максимальная длина описания - 200 символов.",
             groups = {ValidAction.OnCreate.class, ValidAction.OnUpdate.class})
     private String description;
-
     @NotNull(message = "Доступ должен быть определен.", groups = {ValidAction.OnCreate.class})
     private Boolean available;
-
     private Long requestId;
-
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Instant lastBooking;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Instant nextBooking;
 }

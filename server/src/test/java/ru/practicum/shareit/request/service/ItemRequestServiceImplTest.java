@@ -15,7 +15,6 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -80,7 +79,7 @@ class ItemRequestServiceImplTest {
         ItemRequestDto itemRequestDto = new ItemRequestDto();
         itemRequestDto.setDescription("request test by customer id");
         itemRequestDto.setCreated(Instant.now());
-        ItemRequestDto savedRequestDto = itemRequestService.create( userId, itemRequestDto);
+        ItemRequestDto savedRequestDto = itemRequestService.create(userId, itemRequestDto);
         List<RequestWithItemsDto> rwiList = itemRequestService.findReqestsByCustomerId(userId);
         assertThat(rwiList, notNullValue());
         assertTrue(rwiList.size() > 1);
@@ -94,7 +93,7 @@ class ItemRequestServiceImplTest {
         ItemRequestDto itemRequestDto = new ItemRequestDto();
         itemRequestDto.setDescription("request test find all");
         itemRequestDto.setCreated(Instant.now());
-        ItemRequestDto savedRequestDto = itemRequestService.create( userId, itemRequestDto);
+        ItemRequestDto savedRequestDto = itemRequestService.create(userId, itemRequestDto);
 
         Item item = new Item(1L, "Item", "Description",
                 userRepository.findById(userId).get(),

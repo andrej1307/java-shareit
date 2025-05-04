@@ -57,7 +57,9 @@ class UserServiceImplTest {
                 .isEqualTo(savedUserDto);
 
         assertThrows(NotFoundException.class,
-                () -> { userService.getUserById(100L); },
+                () -> {
+                    userService.getUserById(100L);
+                },
                 "Чтение несуществующего пользователя должно приводить к исключению.");
     }
 
@@ -80,7 +82,9 @@ class UserServiceImplTest {
 
         savedUserDto.setId(9999L);
         assertThrows(NotFoundException.class,
-                () -> { userService.updateUser(savedUserDto); },
+                () -> {
+                    userService.updateUser(savedUserDto);
+                },
                 "Редактирование несуществующего пользователя должно приводить к исключению.");
     }
 

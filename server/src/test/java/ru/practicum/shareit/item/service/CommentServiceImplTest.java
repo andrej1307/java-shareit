@@ -80,7 +80,9 @@ class CommentServiceImplTest {
 
         commentDto.setAuthorId(savedItem.getId());
         assertThrows(NotFoundException.class,
-                () -> { commentService.addComment(commentDto); },
+                () -> {
+                    commentService.addComment(commentDto);
+                },
                 "Коментирование хозяином  должно приводить к исключению.");
     }
 }

@@ -66,6 +66,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     /**
      * Поиск собственных запросов заказчика
+     *
      * @param customerId - идентификатор заказчика
      * @return - список запросов с ответными предложениями вещей
      */

@@ -46,8 +46,7 @@ public class CommentServiceImpl implements CommentService {
         }
         LocalDateTime now = LocalDateTime.now();
         if (LocalDateTime.ofInstant(booking.getEnd(), ZoneOffset.UTC).isAfter(now)) {
-            throw new ValidationException("Комментарий возможен после завершения срока аренды. " +
-                    "Конец аренды : " + LocalDateTime.ofInstant(booking.getEnd(), ZoneOffset.UTC) + " Текущее время : " + now);
+            throw new ValidationException("Комментировать можно после завершения срока аренды. " + LocalDateTime.ofInstant(booking.getEnd(), ZoneOffset.UTC));
         }
         Item item = booking.getItem();
         if (item.getOwner().getId().equals(userId)) {

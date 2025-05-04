@@ -28,19 +28,15 @@ public class Item {
     @NotBlank(message = "Имя не может быть пустым", groups = {ValidAction.OnCreate.class})
     @Column(name = "name", nullable = false)
     private String name;
-
     @Size(max = 255, message = "Максимальная длина описания - 255 символов.",
             groups = {ValidAction.OnCreate.class, ValidAction.OnUpdate.class})
     @Column(name = "description")
     private String description;
-
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
-
     @Column(name = "available")
     private Boolean available;
-
     @ManyToOne
     @JoinColumn(name = "request_id")
     private ItemRequest request;

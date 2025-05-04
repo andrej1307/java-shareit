@@ -8,6 +8,7 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -56,14 +57,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Collection<UserDto> getAllUsers() {
-        return userRepository.findAll().stream()
-                .map(UserMapper::toUserDto)
-                .toList();
+        return userRepository.findAll().stream().map(UserMapper::toUserDto).toList();
     }
 
     @Override
     public Collection<UserDto> deleteAllUsers() {
         userRepository.deleteAll();
-        return getAllUsers();
+        return List.of();
     }
 }

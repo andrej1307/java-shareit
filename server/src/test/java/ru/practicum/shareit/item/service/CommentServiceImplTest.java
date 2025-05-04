@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.enums.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.excepton.NotFoundException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
@@ -21,6 +22,7 @@ import java.time.ZoneOffset;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Transactional
 @SpringBootTest
@@ -75,5 +77,10 @@ class CommentServiceImplTest {
         assertThat(commentDto1.getId(), notNullValue());
         assertEquals(commentDto1.getText(), commentDto.getText());
         assertEquals(commentDto1.getItemId(), commentDto1.getItemId());
+
+        commentDto.setAuthorId(savedItem.getId());
+        assertThrows(NotFoundException.class,
+                () -> { commentService.addComment(commentDto); },
+                "Коментирование хозяином  должно приводить к исключению.");
     }
 }

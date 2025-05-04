@@ -57,9 +57,7 @@ class UserServiceImplTest {
                 .isEqualTo(savedUserDto);
 
         assertThrows(NotFoundException.class,
-                () -> {
-                    userService.getUserById(100L);
-                },
+                () -> { userService.getUserById(100L); },
                 "Чтение несуществующего пользователя должно приводить к исключению.");
     }
 
@@ -80,8 +78,10 @@ class UserServiceImplTest {
                 .usingRecursiveComparison()
                 .isEqualTo(savedUserDto);
 
-        Long userId = savedUserDto.getId();
-
+        savedUserDto.setId(9999L);
+        assertThrows(NotFoundException.class,
+                () -> { userService.updateUser(savedUserDto); },
+                "Редактирование несуществующего пользователя должно приводить к исключению.");
     }
 
     @Test
@@ -130,7 +130,6 @@ class UserServiceImplTest {
 
     @Test
     void deleteAllUsers() {
-        getAllUsers();
         List<UserDto> targetUsers = userService.deleteAllUsers().stream().toList();
         assertThat(targetUsers, notNullValue());
         assertThat(targetUsers, hasSize(0));

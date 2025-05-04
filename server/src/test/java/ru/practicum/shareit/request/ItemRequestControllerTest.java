@@ -29,13 +29,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = ItemRequestController.class)
 class ItemRequestControllerTest {
     private static final String HEADER_USER_ID = "X-Sharer-User-Id";
-
     @Autowired
     ObjectMapper mapper;
-
     @MockBean
     private ItemRequestService itemRequestService;
-
     @Autowired
     private MockMvc mvc;
 

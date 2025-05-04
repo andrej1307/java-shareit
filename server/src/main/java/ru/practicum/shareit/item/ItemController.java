@@ -2,14 +2,12 @@ package ru.practicum.shareit.item;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemCommentsDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.CommentService;
 import ru.practicum.shareit.item.service.ItemService;
-import ru.practicum.shareit.validator.ValidAction;
 
 import java.util.Collection;
 
@@ -57,7 +55,7 @@ public class ItemController {
     @ResponseStatus(HttpStatus.CREATED)
     public ItemDto createItem(
             @RequestHeader(HEADER_USER_ID) final Long ownerId,
-            @Validated(ValidAction.OnCreate.class) @RequestBody ItemDto itemDto) {
+            @RequestBody ItemDto itemDto) {
         log.info("Пользователь id={} добавляет вещь : {}", ownerId, itemDto.toString());
         return itemService.addItem(itemDto, ownerId);
     }

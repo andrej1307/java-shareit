@@ -23,14 +23,6 @@ public class ItemRequestController {
         this.itemRequestService = itemRequestService;
     }
 
-    /**
-     * Создаем новый запрос
-     *
-     * @param customerId     - идентификатор заказчика
-     * @param itemRequestDto - объект описания запроса
-     * @return - сохраненный запрос
-     * @throws Exception
-     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ItemRequestDto createItemRequest(
@@ -40,9 +32,6 @@ public class ItemRequestController {
         return itemRequestService.create(customerId, itemRequestDto);
     }
 
-    /**
-     * Поиск запроса по идентификатору
-     */
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public RequestWithItemsDto findItemRequest(
@@ -52,10 +41,6 @@ public class ItemRequestController {
         return itemRequestService.findReqestsById(userId, id);
     }
 
-
-    /**
-     * Поиск пользователем своих запросов
-     */
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
     public List<RequestWithItemsDto> findRequestsByUserId(
@@ -65,9 +50,6 @@ public class ItemRequestController {
         return itemRequestService.findReqestsByCustomerId(userId);
     }
 
-    /**
-     * Поиск пользователем всех чужих запросов
-     */
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
     public List<RequestWithItemsDto> findAllRequests(

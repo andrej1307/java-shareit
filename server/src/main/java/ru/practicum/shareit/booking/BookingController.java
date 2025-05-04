@@ -2,12 +2,10 @@ package ru.practicum.shareit.booking;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.enums.SearchState;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.validator.ValidAction;
 
 import java.util.List;
 
@@ -29,7 +27,6 @@ public class BookingController {
     @ResponseStatus(HttpStatus.CREATED)
     public BookingDto addBooking(
             @RequestHeader(HEADER_USER_ID) final Long bookerId,
-            @Validated(ValidAction.OnCreate.class)
             @RequestBody BookingDto bookingDto) {
         log.info("Пользователь id={} cоздает запрос на бронирование : {}", bookerId, bookingDto);
         return bookingService.addBooking(bookingDto, bookerId);

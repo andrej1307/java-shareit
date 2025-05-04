@@ -43,7 +43,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     public ItemRequestDto create(Long customerId, ItemRequestDto itemRequestDto) {
         User customer = userRepository.findById(customerId)
                 .orElseThrow(() -> new NotFoundException("Не найден пользователь id=" + customerId));
-
         itemRequestDto.setRequestor(UserMapper.toUserDto(customer));
         itemRequestDto.setCreated(Instant.now());
         ItemRequest savedItemRequest = itemRequestRepository.save(
@@ -57,7 +56,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
                 .orElseThrow(() -> new NotFoundException("Не найден пользователь id=" + userId));
         ItemRequest request = itemRequestRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Не найден запрос id=" + id));
-
         RequestWithItemsDto rwi = ItemRequestMapper.toRwiDto(request);
         List<ItemShortDto> items = itemRepository.findAllByRequest_IdEquals(id).stream()
                 .map(ItemMapper::toItemShortDto)
@@ -68,7 +66,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     /**
      * Поиск собственных запросов заказчика
-     *
      * @param customerId - идентификатор заказчика
      * @return - список запросов с ответными предложениями вещей
      */
@@ -76,7 +73,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     public List<RequestWithItemsDto> findReqestsByCustomerId(Long customerId) {
         userRepository.findById(customerId)
                 .orElseThrow(() -> new NotFoundException("Не найден пользователь id=" + customerId));
-
         List<ItemRequest> reqests = itemRequestRepository.findAllByCustomer_IdEquals(
                 customerId, Sort.by("created").descending());
         return addItemsToRequests(reqests);
@@ -86,7 +82,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     public List<RequestWithItemsDto> findAllReqests(Long customerId) {
         userRepository.findById(customerId)
                 .orElseThrow(() -> new NotFoundException("Не найден пользователь id=" + customerId));
-
         List<ItemRequest> reqests = itemRequestRepository
                 .findAllNotCustomer_Id(customerId);
         return addItemsToRequests(reqests);
@@ -101,7 +96,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
             rwiDtos.add(rwiDto);
             rwiDtoMap.put(itemRequest.getId(), rwiDto);
         }
-
         List<Long> ids = new ArrayList<>(rwiDtoMap.keySet());
         List<Item> items = itemRepository.findAllByRequest_IdIn(ids);
         for (Item item : items) {
@@ -110,7 +104,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
                 rwiDtoMap.get(requestId).getItems().add(ItemMapper.toItemShortDto(item));
             }
         }
-
         return rwiDtos;
     }
 }

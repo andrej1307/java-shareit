@@ -6,12 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.excepton.NotFoundException;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.ItemRequestMapper;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.RequestWithItemsDto;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -27,6 +31,8 @@ class ItemRequestServiceImplTest {
 
     Long userId = 0L;
     Long requestId = 0L;
+    @Autowired
+    private ItemRepository itemRepository;
 
     @Test
     void create() {
@@ -74,26 +80,27 @@ class ItemRequestServiceImplTest {
         ItemRequestDto itemRequestDto = new ItemRequestDto();
         itemRequestDto.setDescription("request test by customer id");
         itemRequestDto.setCreated(Instant.now());
-        ItemRequestDto savedRequestDto = itemRequestService.create(
-                userId,
-                itemRequestDto);
-        List<RequestWithItemsDto> rwiList =
-                itemRequestService.findReqestsByCustomerId(userId);
+        ItemRequestDto savedRequestDto = itemRequestService.create( userId, itemRequestDto);
+        List<RequestWithItemsDto> rwiList = itemRequestService.findReqestsByCustomerId(userId);
         assertThat(rwiList, notNullValue());
         assertTrue(rwiList.size() > 1);
     }
 
     @Test
-    void findAllReqests() {
+    void findAllReqests() throws NotFoundException, Exception {
         if (userId.equals(0L)) {
             create();
         }
         ItemRequestDto itemRequestDto = new ItemRequestDto();
         itemRequestDto.setDescription("request test find all");
         itemRequestDto.setCreated(Instant.now());
-        ItemRequestDto savedRequestDto = itemRequestService.create(
-                userId,
-                itemRequestDto);
+        ItemRequestDto savedRequestDto = itemRequestService.create( userId, itemRequestDto);
+
+        Item item = new Item(1L, "Item", "Description",
+                userRepository.findById(userId).get(),
+                true,
+                ItemRequestMapper.toItemRequest(savedRequestDto));
+        item = itemRepository.save(item);
 
         // для поиска "чужих" запросов заведем еще одного пользователя
         User newUser = new User(2L, "UserName2", "user2@request.test");
@@ -106,3 +113,4 @@ class ItemRequestServiceImplTest {
         assertTrue(rwiList.size() > 1);
     }
 }
+

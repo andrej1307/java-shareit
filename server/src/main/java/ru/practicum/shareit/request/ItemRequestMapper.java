@@ -40,5 +40,4 @@ public class ItemRequestMapper {
         itemRequestDto.setCreated(itemRequest.getCreated());
         return itemRequestDto;
     }
-
 }

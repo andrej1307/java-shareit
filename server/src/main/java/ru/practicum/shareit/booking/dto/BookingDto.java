@@ -19,18 +19,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class BookingDto {
     private Long id;
-
-    @NotNull(message = "Время начала бронирования должно быть задано.", groups = {ValidAction.OnCreate.class})
     private LocalDateTime start;
-
-    @NotNull(message = "Время завершения бронирования должно быть задано.", groups = {ValidAction.OnCreate.class})
     private LocalDateTime end;
-
     private Long itemId;
     private ItemDto item;
-
     private Long bookerId;
     private UserDto booker;
-
     private BookingStatus status = BookingStatus.WAITING;
 }

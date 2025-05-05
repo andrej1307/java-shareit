@@ -16,6 +16,5 @@ public class RequestWithItemsDto {
     private String description;
     private UserDto requestor;
     private Instant created;
-
     private List<ItemShortDto> items = new ArrayList<>();
 }

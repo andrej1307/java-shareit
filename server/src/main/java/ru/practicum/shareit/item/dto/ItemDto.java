@@ -18,13 +18,8 @@ import java.time.Instant;
 @NoArgsConstructor
 public class ItemDto {
     private Long id;
-    @NotBlank(message = "Имя не может быть пустым", groups = {ValidAction.OnCreate.class})
     private String name;
-    @NotBlank(message = "Описание не может быть пустым", groups = {ValidAction.OnCreate.class})
-    @Size(max = 200, message = "Максимальная длина описания - 200 символов.",
-            groups = {ValidAction.OnCreate.class, ValidAction.OnUpdate.class})
     private String description;
-    @NotNull(message = "Доступ должен быть определен.", groups = {ValidAction.OnCreate.class})
     private Boolean available;
     private Long requestId;
     private Instant lastBooking;

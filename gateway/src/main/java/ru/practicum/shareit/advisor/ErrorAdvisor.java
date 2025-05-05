@@ -32,7 +32,7 @@ public class ErrorAdvisor {
                 .map(error -> new ErrorMessage("[" + error.getField() + "] "
                         + error.getDefaultMessage()))
                 .collect(Collectors.toList());
-        log.info("400 {}.", e.getMessage());
+        log.error("400 {}.", e.getMessage());
         return violations.get(0);
     }
 
@@ -45,7 +45,7 @@ public class ErrorAdvisor {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorMessage handleException(final Exception e) {
-        log.warn("Error", e);
+        log.error("Error", e);
         return new ErrorMessage(e.getMessage());
     }
 }

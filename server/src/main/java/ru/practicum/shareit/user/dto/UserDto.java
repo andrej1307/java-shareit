@@ -12,9 +12,7 @@ import ru.practicum.shareit.validator.ValidAction;
 @NoArgsConstructor
 public class UserDto {
     private Long id;
-    @NotBlank(message = "Имя не может быть пустым", groups = {ValidAction.OnCreate.class})
     private String name;
-    @NotBlank(message = "Email не может быть пустым", groups = {ValidAction.OnCreate.class})
     @Email(message = "Email должен удовлетворять правилам формирования почтовых адресов.",
             groups = {ValidAction.OnCreate.class, ValidAction.OnUpdate.class})
     private String email;

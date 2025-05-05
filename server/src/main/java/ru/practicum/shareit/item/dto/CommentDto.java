@@ -13,7 +13,6 @@ import java.time.Instant;
 @NoArgsConstructor
 public class CommentDto {
     private Long id;
-    @NotBlank(message = "Текст не может быть пустым", groups = {ValidAction.OnCreate.class})
     private String text;
     private Long authorId;
     private String authorName;

@@ -11,7 +11,6 @@ import ru.practicum.shareit.validator.ValidAction;
 @NoArgsConstructor
 public class ItemShortDto {
     private Long id;
-    @NotBlank(message = "Имя не может быть пустым", groups = {ValidAction.OnCreate.class})
     private String name;
     private Long ownerId;
 }
